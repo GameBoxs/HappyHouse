@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+    <div class="home">
     <div id="page-top">
         <!-- Carousel 영역 -->
         <div id="carouselExampleControls" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-pause="false">

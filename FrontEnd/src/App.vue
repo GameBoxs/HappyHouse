@@ -32,7 +32,7 @@ export default {
 };
 </script>
 
-<style>
+<style global>
 @import "@/assets/css/styles.css";
 /* 스크롤바 디자인 없애기(기능은 동작) 시작 */
 body {
@@ -41,6 +41,10 @@ body {
 }
 body::-webkit-scrollbar {
     display: none;
+}
+#app{
+  min-height: 100%;
+  padding-bottom: 80px;
 }
 /* 스크롤바 디자인 없애기 끝 */
 

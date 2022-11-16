@@ -2,6 +2,8 @@
     <div>
         <div class="loginbody1">
         </div>
+        <div class="loginbody2">
+        </div>
         <div class="wrapper">
             <div class="logo">
                 <img src="https://cdn.pixabay.com/photo/2015/12/28/02/58/home-1110868_960_720.png" alt="">
@@ -23,8 +25,6 @@
             <div class="text-center fs-6">
                 <a href="#">PW 찾기</a> or <a href="#">가입</a>
             </div>
-        </div>
-        <div class="loginbody2">
         </div>
     </div>
 </template>
@@ -54,10 +54,11 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
 
 .loginbody1{
-    height: 150px;
+    height: 100px;
+    background: #212429;
 }
 .loginbody2{
-    height: 100px;
+    height: 200px;
 }
 
 /* Reseting */
@@ -69,7 +70,8 @@ export default {
 }
 
 body {
-    background: #D8D9CF;
+    /* background: #EFF5F5; */
+    background: white;
 }
 
 .wrapper {

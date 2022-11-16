@@ -67,7 +67,7 @@
 
 <script>
 export default {
-    name: 'WhereismyhomeVueFindApt',
+    name: 'FindApt',
 
     data() {
         return {
@@ -110,7 +110,7 @@ ol{
     font-family: 'Noto Sans KR', sans-serif;
 }
 .aptBody {
-    height: 1000px;
+    /* height: 1000px; */
     background: #F9F9F9;
 }
 </style>
