@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: Alsdk9503!
+    url: jdbc:mysql://localhost:3306/ssafy_pjt
+  jpa:
+    hibernate:
+      ddl-auto: create
