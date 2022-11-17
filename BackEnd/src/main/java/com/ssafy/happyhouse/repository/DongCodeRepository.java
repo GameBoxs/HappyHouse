@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface DongCodeRepository extends JpaRepository<DongCode, String> {
@@ -16,5 +17,7 @@ public interface DongCodeRepository extends JpaRepository<DongCode, String> {
     @Query("select distinct d.dongName from DongCode d where d.sidoName = :sido and d.gugunName = :gugun and d.dongName is not null")
     List<String> findDongName(@Param("sido") String sido, @Param("gugun") String gugun);
 
-    List<DongCode> findAllBySidoNameAndGugunNameAndDongName(String sidoName, String gugunName, String dongName);
+    List<DongCode> findBySidoNameAndGugunNameAndDongName(String sidoName, String gugunName, String dongName);
+
+    Optional<DongCode> findByDongcode(String dongCode);
 }

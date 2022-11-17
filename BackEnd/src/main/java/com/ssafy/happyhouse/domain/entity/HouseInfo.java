@@ -1,17 +1,14 @@
 package com.ssafy.happyhouse.domain.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Getter
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 @Builder
 public class HouseInfo {
 

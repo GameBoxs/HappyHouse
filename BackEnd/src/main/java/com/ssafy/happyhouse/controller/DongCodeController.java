@@ -31,6 +31,7 @@ public class DongCodeController {
 
     @GetMapping("/{sidoName}/{gugunName}/{dongName}")
     public List<DongDTO> getDongCode(@PathVariable String sidoName, @PathVariable String gugunName, @PathVariable String dongName) {
+        log.info("[{}][{}][{}]", sidoName, gugunName, dongName);
         return dongCodeService.findDongCode(sidoName, gugunName, dongName);
     }
 }

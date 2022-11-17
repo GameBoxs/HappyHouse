@@ -29,7 +29,7 @@ public class DongCodeServiceImpl implements DongCodeService {
 
     @Override
     public List<DongDTO> findDongCode(String sido, String gugun, String dong) {
-        return dongCodeRepository.findAllBySidoNameAndGugunNameAndDongName(sido, gugun, dong).stream()
+        return dongCodeRepository.findBySidoNameAndGugunNameAndDongName(sido, gugun, dong).stream()
                 .map(dongCode -> DongDTO.builder()
                         .dongCode(dongCode.getDongcode())
                         .name(dongCode.getSidoName() + " " + dongCode.getGugunName() + " " + dongCode.getDongName())
