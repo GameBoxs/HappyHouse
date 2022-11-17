@@ -10,7 +10,7 @@
                         <ol class="breadcrumb justify-content-center mb-0">
                             <div class="row col-md justify-content-center mb-2">
                                 <div class="form-group col-md">
-                                    <select class="form-select bg-white text-black" id="sido" style="width:150px">
+                                    <select class="form-select bg-white text-black" v-model="sido" style="width:150px">
                                         <option value="all">도/광역시</option>
                                         <option value="11">서울시</option>
                                         <option value="41">경기도</option>
@@ -73,12 +73,49 @@ export default {
 
     data() {
         return {
-            
+            sido:"",
         };
     },
 
     mounted() {
         
+    },
+
+    watch:{
+        sido: function() {
+            // 작업 해야 할 것
+            // 시/도 값이 변경시 구/군 초기화
+        	document.querySelector('#gugun').innerHTML = "";
+        	let initgu = document.createElement('option');
+        	initgu.setAttribute('value','all');
+        	initgu.innerText = '구/군';
+            document.querySelector('#gugun').appendChild(initgu);
+            
+            // 시/도 값이 변경시 동 초기화
+            document.querySelector('#dong').innerHTML = "";
+        	let initdo = document.createElement('option');
+        	initdo.setAttribute('value','all');
+        	initdo.innerText = '동';
+            document.querySelector('#dong').appendChild(initdo);
+            
+            if (this.sido) {
+                let regcode = this.sido;
+
+                let temp = `/apt/gugun/`;
+                console.log(temp+regcode);
+                // fetch(temp+regcode)
+                //     .then((response) => response.json())
+                //     .then((data) =>{
+                //         for(i in data.items){
+                //             let opt = document.createElement('option');
+                //             opt.setAttribute('value',data.items[i].code);
+                //             opt.innerText = data.items[i].Name;
+                //             document.querySelector('#gugun').appendChild(opt);
+                //         }
+                //     }
+                // );
+            }
+        },
     },
 
     methods: {
@@ -88,6 +125,7 @@ export default {
         MapView,
     }
 };
+
 </script>
 
 <style>
