@@ -1,9 +1,9 @@
 <template>
-    <div>
+    <div class="loginBody">
         <div class="loginbody1">
         </div>
-        <div class="loginbody2">
-        </div>
+        <!-- <div class="loginbody2">
+        </div> -->
         <div class="wrapper">
             <div class="logo">
                 <img src="https://cdn.pixabay.com/photo/2015/12/28/02/58/home-1110868_960_720.png" alt="">
@@ -14,7 +14,7 @@
             <form class="p-3 mt-3">
                 <div class="form-field d-flex align-items-center">
                     <span class="far fa-user"></span>
-                    <input type="text" name="userName" id="userName" placeholder="Username">
+                    <input type="text" name="userName" id="userName" placeholder="E-mail">
                 </div>
                 <div class="form-field d-flex align-items-center">
                     <span class="fas fa-key"></span>
@@ -49,7 +49,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 /* Importing fonts from Google */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
 
@@ -60,7 +60,6 @@ export default {
 .loginbody2{
     height: 200px;
 }
-
 /* Reseting */
 * {
     margin: 0;
@@ -69,11 +68,13 @@ export default {
     font-family: 'Poppins', sans-serif;
 }
 
-body {
-    /* background: #EFF5F5; */
-    background: white;
+.loginBody {
+    background: #F0ECE3;
+    /* background: white; */
 }
-
+body {
+    background: #F0ECE3;
+}
 .wrapper {
     max-width: 350px;
     min-height: 500px;

@@ -48,7 +48,7 @@ export default {
 footer {
     bottom: 0;
     height: 80px;
-    position: fixed;
+    /* position: fixed; */
     width: 100%;
 }
 </style>

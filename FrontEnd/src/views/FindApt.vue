@@ -1,10 +1,10 @@
 <template>
-    <div>
+    <div class="findaptmain">
         <div class="bg-image">
             <div class="mask">
                 <div class="d-flex justify-content-center align-items-center h-100 pt-5" style="flex-direction: column;">
                     <div>
-                        <h1 class="text-white mb-5">Find Your Apartment</h1>
+                        <h1 class="text-white mb-5"><span class="text-warning">Find</span> <span class="text-success">Apartment</span></h1>
                     </div>
                     <div>
                         <ol class="breadcrumb justify-content-center mb-0">
@@ -58,14 +58,16 @@
                 </div>
             </div>
         </div>
-        <div class="aptBody">
-            <div class="aptTitle">
+        <div class="aptBodyDiv container-fluid">
+            <div class="aptBody rounded-3 mx-auto">
+                <MapView/>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import MapView from '@/components/Function/MapView.vue'
 export default {
     name: 'FindApt',
 
@@ -82,6 +84,9 @@ export default {
     methods: {
         
     },
+    components: {
+        MapView,
+    }
 };
 </script>
 
@@ -90,7 +95,8 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Dongle&family=Jua&family=Noto+Sans+KR&display=swap');
 .bg-image{
     height: 500px;
-    background-image: url('@/assets/img/findAptTitle.jpg'); 
+    width: 100%;
+    background: url('@/assets/img/findAptTitle.jpg');     
 }
 .mask{
     background-color: rgba(0, 0, 0, 0.6);
@@ -110,7 +116,25 @@ ol{
     font-family: 'Noto Sans KR', sans-serif;
 }
 .aptBody {
-    /* height: 1000px; */
+    /* box-shadow: 13px 13px 20px #cbced1, -13px -13px 20px #fff; */
+    box-shadow: 1px 3px 26px 11px rgba(0,0,0,0.2);
+    /* margin-left: -150px; */
+    /* left: -260px; */
+    width: 95%;
+    height: 700px;
+    /* background: #F9F9F9; */
+    
     background: #F9F9F9;
+    position: relative;
+
+}
+body{
+    /* background: #F2F2F2; */
+    background: white;
+}
+.aptBodyDiv{
+    position: relative;
+    transform: translateY(-80px);
+    z-index: 1;
 }
 </style>

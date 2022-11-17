@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="userDiv">
         <router-view/>
     </div>
 </template>
@@ -25,5 +25,10 @@ export default {
 </script>
 
 <style>
-
+    .userDiv{
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        background: #F0ECE3;
+    }
 </style>

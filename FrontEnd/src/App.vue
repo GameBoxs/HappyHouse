@@ -2,13 +2,13 @@
   <div id="app">
     <NavBar/>
     <router-view/>
-    <FooterView/>
+    <!-- <FooterView/> -->
   </div>
 </template>
 
 <script>
 import NavBar from '@/components/NavBar.vue'
-import FooterView from '@/components/FooterView.vue'
+// import FooterView from '@/components/FooterView.vue'
 export default {
   name: 'App',
   data() {
@@ -19,7 +19,7 @@ export default {
 
   components: {
     NavBar,
-    FooterView,
+    // FooterView,
   },
 
   mounted() {
@@ -32,7 +32,7 @@ export default {
 };
 </script>
 
-<style global>
+<style>
 @import "@/assets/css/styles.css";
 /* 스크롤바 디자인 없애기(기능은 동작) 시작 */
 body {

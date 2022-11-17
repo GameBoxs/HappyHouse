@@ -1,6 +1,5 @@
 <template>
-  <div>
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+    <nav class="navbar navbar-expand-xxl navbar-dark fixed-top" id="mainNav">
       <div class="container-fluid">
         <router-link class="navbar-brand" to="/">
           <h1 class="fw-bold text-waring m-0 ms-5">Where <span class="text-white">Is My </span>
@@ -65,7 +64,6 @@
         <!-- </div> -->
       </div>
     </nav>
-  </div>
 </template>
 
 <script>
