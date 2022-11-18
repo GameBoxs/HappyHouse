@@ -21,4 +21,6 @@ public class HouseDealController {
     public List<HouseDeal> getDeal(@PathVariable String dongCode) {
         return houseDealService.findDealByDongCode(dongCode);
     }
+
+    //TODO : aptCode로 해당 아파트의 거래 정보를 최신순으로
 }
