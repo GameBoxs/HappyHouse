@@ -17,6 +17,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void save(UserDTO userDTO) {
+        if (userRepository.findByEmail(userDTO.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("이미 있는 이메일입니다.");
+        }
+
         User user = User.builder()
                 .name(userDTO.getName())
                 .email(userDTO.getEmail())
