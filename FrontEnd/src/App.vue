@@ -2,7 +2,9 @@
   <div id="app">
     <NavBar/>
     <router-view/>
-    <!-- <FooterView/> -->
+    <!-- <div class="footDiv">
+    <FooterView/>
+    </div> -->
   </div>
 </template>
 
@@ -30,6 +32,7 @@ export default {
     
   },
 };
+
 </script>
 
 <style>
@@ -43,10 +46,17 @@ body::-webkit-scrollbar {
     display: none;
 }
 #app{
-  min-height: 100%;
-  padding-bottom: 80px;
+  overflow: auto;
+  /* min-height: 100%; */
+  /* height: 100%; */
+  /* padding-bottom: 80px; */
+  /* margin-bottom: 80px; */
 }
 /* 스크롤바 디자인 없애기 끝 */
+
+
+
+
 
 /* #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

@@ -16,7 +16,7 @@
             <li class="nav-item"><router-link class="nav-link" to="/"><span class="navspan">홈</span></router-link></li>
             <li class="nav-item"><a class="nav-link" href="#services"><span class="navspan">공지사항</span></a></li>
             <li class="nav-item"><a class="nav-link" href="#portfolio"><span class="navspan">Q&A</span></a></li>
-            <li class="nav-item"><a class="nav-link" href="#about"><span class="navspan">아파트 매매 찾기</span></a></li>
+            <li class="nav-item"><router-link class="nav-link" :to="{name:'apt'}"><span class="navspan">아파트 매매 찾기</span></router-link></li>
             <li class="nav-item"><a class="nav-link" href="#team"><span class="navspan">오늘의 뉴스</span></a></li>
             <li class="nav-item">
               <a href="${root}/member?act=mvregist" class="btn btn-default btn-sm text-white">

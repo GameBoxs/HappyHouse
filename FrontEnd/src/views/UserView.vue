@@ -26,9 +26,9 @@ export default {
 
 <style>
     .userDiv{
-        position: absolute;
-        height: 100%;
+        /* position: relative; */
+        min-height: 100vh;
         width: 100%;
-        background: #F0ECE3;
+        background: white;
     }
 </style>

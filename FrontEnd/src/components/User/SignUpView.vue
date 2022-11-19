@@ -1,6 +1,6 @@
 <template>
-    <div class="loginBody">
-        <div class="loginbody1">
+    <div class="signBody">
+        <div class="signbody1">
         </div>
         <div class="wrapperDiv">
             <div class="wrapper border">
@@ -8,9 +8,13 @@
                     <img src="https://cdn.pixabay.com/photo/2015/12/28/02/58/home-1110868_960_720.png" alt="">
                 </div>
                 <div class="text-center mt-4 name">
-                    LogIn
+                    SignUp
                 </div>
                 <form class="p-3 mt-3">
+                    <div class="form-field d-flex align-items-center">
+                        <span class="far fa-user"></span>
+                        <input type="text" name="userName" id="userName" placeholder="Name">
+                    </div>
                     <div class="form-field d-flex align-items-center">
                         <span class="far fa-envelope"></span>
                         <input type="text" name="userEmail" id="userEmail" placeholder="E-mail">
@@ -19,11 +23,8 @@
                         <span class="fas fa-key"></span>
                         <input type="password" name="password" id="pwd" placeholder="Password">
                     </div>
-                    <button class="btn mt-3">로그인</button>
+                    <button class="btn mt-2">가입하기</button>
                 </form>
-                <div class="text-center fs-6 router">
-                    <router-link to="#" class="router">PW 찾기</router-link> or <router-link :to="{name:'signup'}" class="router">가입</router-link>
-                </div>
             </div>
         </div>
     </div>
@@ -31,7 +32,7 @@
 
 <script>
 export default {
-    name: 'LoginView',
+    name: 'SignUpView',
 
     data() {
         return {
@@ -40,7 +41,7 @@ export default {
     },
 
     mounted() {
-        // document.querySelector('.wrapperDiv').style.height = document.querySelector('.loginBody').style.height-100+'px';
+        
     },
 
     methods: {
@@ -59,7 +60,7 @@ button, .name{
     font-size: 25px;
 }
 
-.loginbody1{
+.signbody1{
     height: 100px;
     background: #212429;
     position: relative;
@@ -73,13 +74,13 @@ button, .name{
     font-family: 'Poppins', sans-serif;
 }
 
-.loginBody {
+.signBody {
     /* background: #474E68; */
     height: 100vh;
     position: relative;
     overflow: hidden;
 }
-.loginBody::before {
+.signBody::before {
     /* background: url('https://images.unsplash.com/photo-1556379092-dca659792591?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2064&q=80'); */
     background: url('https://images.unsplash.com/flagged/photo-1559717865-a99cac1c95d8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1742&q=80');
     background-size: cover;
