@@ -1,7 +1,9 @@
 package com.ssafy.happyhouse.controller;
 
+import com.ssafy.happyhouse.annotation.Login;
 import com.ssafy.happyhouse.domain.dto.UserDTO;
 import com.ssafy.happyhouse.domain.dto.UserLoginDTO;
+import com.ssafy.happyhouse.domain.entity.User;
 import com.ssafy.happyhouse.interceptor.JwtConst;
 import com.ssafy.happyhouse.security.JwtProvider;
 import com.ssafy.happyhouse.service.UserService;
@@ -37,7 +39,7 @@ public class UserController {
         cookie.setPath("/");
         response.addCookie(cookie);
 
-        log.info("JWT-TOKEN [{}]",jwtToken);
+        log.info("JWT-TOKEN [{}]", jwtToken);
 
         return "ok";
     }
@@ -58,4 +60,13 @@ public class UserController {
     }
 
     //TODO : 유저 정보 수정?
+    @PatchMapping
+    public void changePassword(@RequestParam String password) {
+
+    }
+
+    @GetMapping("/resolverTest")
+    public void resolverTest(@Login User user) {
+        log.info("USER [{}]", user);
+    }
 }

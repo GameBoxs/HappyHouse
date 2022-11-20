@@ -48,7 +48,7 @@ public class JwtProvider {
         return claims;
     }
 
-    public String extractUsername(String token) {
+    public String extractEmail(String token) {
         final Claims claims = extractAllClaims(token);
         if (claims == null) return null;
         else return claims.get("userEmail", String.class);

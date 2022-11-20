@@ -3,7 +3,6 @@ package com.ssafy.happyhouse.interceptor;
 import com.ssafy.happyhouse.domain.entity.User;
 import com.ssafy.happyhouse.repository.UserRepository;
 import com.ssafy.happyhouse.security.JwtProvider;
-import com.ssafy.happyhouse.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -46,7 +45,7 @@ public class JwtInterceptor implements HandlerInterceptor {
         String token = jwt.get().getValue();
         log.debug("token [{}]", token);
 
-        String userEmail = jwtProvider.extractUsername(token);
+        String userEmail = jwtProvider.extractEmail(token);
         Optional<User> findUser = userRepository.findByEmail(userEmail);
         if (findUser.isEmpty()) {
             log.debug("NO USER REDIRECT [{}][{}]", requestURI, userEmail);
