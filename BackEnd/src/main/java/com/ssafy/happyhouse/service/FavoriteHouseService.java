@@ -1,6 +1,5 @@
 package com.ssafy.happyhouse.service;
 
-import com.ssafy.happyhouse.domain.dto.FavoriteRankDTO;
 import com.ssafy.happyhouse.domain.entity.FavoriteHouse;
 import com.ssafy.happyhouse.domain.entity.HouseInfo;
 import com.ssafy.happyhouse.domain.entity.User;
@@ -40,6 +39,12 @@ public class FavoriteHouseService {
 
     public boolean isFavorite(Long userId, Long aptCode) {
         return favoriteHouseRepository.existsByUser_IdAndHouseInfo_AptCode(userId, aptCode);
+    }
+
+    public List<HouseInfo> findFavoriteHouses(Long userId) {
+        return favoriteHouseRepository.findByUser_Id(userId).stream()
+                .map(favorite -> favorite.getHouseInfo())
+                .collect(Collectors.toList());
     }
 
 //    public List<FavoriteRankDTO> findRank() {

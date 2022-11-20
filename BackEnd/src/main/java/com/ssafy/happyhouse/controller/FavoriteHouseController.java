@@ -1,11 +1,16 @@
 package com.ssafy.happyhouse.controller;
 
+import com.ssafy.happyhouse.annotation.Login;
 import com.ssafy.happyhouse.domain.dto.FavoriteCountDTO;
+import com.ssafy.happyhouse.domain.entity.HouseInfo;
+import com.ssafy.happyhouse.domain.entity.User;
 import com.ssafy.happyhouse.service.FavoriteHouseService;
 import com.ssafy.happyhouse.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -28,5 +33,10 @@ public class FavoriteHouseController {
     @PostMapping("/aptCode")
     public void addFavorite(@PathVariable Long aptCode, @RequestParam Long userId) {
         favoriteHouseService.save(userId, aptCode);
+    }
+
+    @GetMapping("/users")
+    public List<HouseInfo> findFavorite(@Login User user) {
+        return favoriteHouseService.findFavoriteHouses(user.getId());
     }
 }
