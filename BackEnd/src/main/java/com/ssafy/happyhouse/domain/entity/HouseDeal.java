@@ -28,6 +28,6 @@ public class HouseDeal {
     private String cancelDealType;
 
     @JoinColumn(name = "aptCode")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private HouseInfo houseInfo;
 }

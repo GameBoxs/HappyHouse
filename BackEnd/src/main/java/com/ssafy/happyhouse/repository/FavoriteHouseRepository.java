@@ -1,9 +1,7 @@
 package com.ssafy.happyhouse.repository;
 
-import com.ssafy.happyhouse.domain.dto.FavoriteRankDTO;
 import com.ssafy.happyhouse.domain.entity.FavoriteHouse;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

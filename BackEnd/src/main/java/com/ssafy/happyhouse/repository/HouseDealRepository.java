@@ -13,4 +13,6 @@ public interface HouseDealRepository extends JpaRepository<HouseDeal, Long> {
 
     @Query("select d from HouseDeal d join fetch d.houseInfo i join fetch i.dongCode c where c.dongcode = :dongCode")
     List<HouseDeal> findAllDeal(@Param("dongCode") String dongCode);
+
+    List<HouseDeal> findAllByHouseInfo_AptCode(Long aptCode);
 }
