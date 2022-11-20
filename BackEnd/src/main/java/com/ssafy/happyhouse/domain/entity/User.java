@@ -22,6 +22,7 @@ public class User extends TimeEntity {
     @NotEmpty
     private String name;
 
+    @Column(unique = true)
     @NotEmpty
     private String email;
 
@@ -31,4 +32,8 @@ public class User extends TimeEntity {
     @NotNull
     @Enumerated
     private Role role;
+
+    public void changePassword(String password) {
+        this.password = password;
+    }
 }

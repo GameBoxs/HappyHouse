@@ -20,9 +20,6 @@ import javax.servlet.http.HttpServletResponse;
 @RequiredArgsConstructor
 @RequestMapping("/users")
 public class UserController {
-
-    //TODO : 변경은 비번만
-
     private final UserService userService;
     private final JwtProvider jwtProvider;
 
@@ -59,14 +56,12 @@ public class UserController {
         return userInfo;
     }
 
-    //TODO : 유저 정보 수정?
     @PatchMapping
-    public void changePassword(@RequestParam String password) {
+    public void changePassword(@Login User user, @RequestParam String password) {
+        if (user == null) {
+            throw new IllegalArgumentException("NO USER");
+        }
 
-    }
-
-    @GetMapping("/resolverTest")
-    public void resolverTest(@Login User user) {
-        log.info("USER [{}]", user);
+        userService.updatePassword(user.getId(), password);
     }
 }

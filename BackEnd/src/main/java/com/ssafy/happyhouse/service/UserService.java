@@ -6,4 +6,6 @@ public interface UserService {
     void save(UserDTO userDTO);
 
     UserDTO getUserInfo(Long id);
+
+    void updatePassword(Long userId, String password);
 }
