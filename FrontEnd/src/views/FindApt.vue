@@ -1,5 +1,10 @@
 <template>
     <div class="findaptmain">
+        <div class="black-bg" v-if="isModalOpen" @click="modalClose($event)" id='black-bg'>
+            <div class="white-bg">
+                <AptModal :lat="requestItem.lat" :lng="requestItem.lng" :aptcode="requestItem.aptCode" :aptname="requestItem.aptname"/>
+            </div>
+        </div>
         <div class="bg-image">
             <div class="mask">
                 <div class="d-flex justify-content-center align-items-center h-100 pt-5" style="flex-direction: column;">
@@ -8,7 +13,7 @@
                     </div>
                     <div>
                         <ol class="breadcrumb justify-content-center mb-0">
-                            <div class="row col-md justify-content-center mb-2">
+                            <div class="row col justify-content-center mb-2">
                                 <div class="form-group col">
                                     <select class="form-select bg-white text-black" v-model="sido" style="width:150px;">
                                         <option value="all">도/광역시</option>
@@ -52,7 +57,7 @@
         </div>
         <div class="aptBodyDiv container-fluid">
             <div class="aptBody rounded-3 mx-auto">
-                <MapView :finalInfo="finalInfo"/>
+                <MapView :finalInfo="finalInfo" @request-modal="RequestModal"/>
             </div>
         </div>
         <div class="space">
@@ -62,6 +67,7 @@
 
 <script>
 import MapView from '@/components/Function/MapView.vue'
+import AptModal from '@/components/Function/Apt/AptModal.vue'
 import http from '@/api/http'
 export default {
     name: 'FindApt',
@@ -72,9 +78,11 @@ export default {
             gugun:"all",
             dong:"all",
             finalInfo:{
-                    dongCode:"",
-                    name:"",
-                },
+                dongCode:"",
+                name:"",
+            },
+            isModalOpen:false,
+            requestItem:null,
         };
     },
 
@@ -198,9 +206,21 @@ export default {
             this.finalInfo.dongCode="";
             this.finalInfo.name="";
         },
+        modalClose(e) {
+            console.log(e.target.id);
+            if(e.target.id == 'black-bg'){
+                this.isModalOpen = false;
+            }
+        },
+        RequestModal(item) {
+            let convertJson = JSON.stringify(item);
+            this.requestItem = JSON.parse(convertJson);
+            this.isModalOpen=true;
+        }
     },
     components: {
         MapView,
+        AptModal,
     }
 };
 
@@ -262,12 +282,31 @@ body{
     background: white;
 }
 .aptBodyDiv{
-    /* position: relative; */
+    /* position: sticky; */
     transform: translateY(-80px);
     z-index: 1;
 }
 
 .findaptmain{
     min-height: 100vh;
+}
+
+.black-bg {
+    top:0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    padding: 20px;
+    z-index: 30;
+}
+.white-bg {
+    height: 90%;
+    width: 20%;
+    margin: 5% auto;
+    background: white;
+    border-radius: 5px;
+    padding: 20px;
 }
 </style>

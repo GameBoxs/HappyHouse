@@ -1,7 +1,7 @@
 <template>
     <div class="mapMainDiv container-fluid">
         <div class="row rowbody">
-            <div class="col-2" style="height:100%;">
+            <div class="col-2 d-none d-xl-block " style="height:100%; ">
                 <div class="" style="height:390px;">
                     <div class="accordion pt-2" id="mapOptionOne">
                         <div class="accordion-item">
@@ -50,9 +50,9 @@
                             </h2>
                             <div id="collapseTwoOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                 <div class="accordion-body">
-                                    <label for="customRange" class="form-label customRangeLabel" v-if="priceFilter < 105000">금액 : 5000만원 ~ {{priceFilter | rangeFilter}}</label>
+                                    <label for="customRange" class="form-label customRangeLabel" v-if="priceFilter < 101000">금액 : 5000만원 ~ {{priceFilter | rangeFilter}}</label>
                                     <label for="customRange" class="form-label customRangeLabel" v-else>금액 : 무제한</label>
-                                    <input type="range" class="form-range" min="5000" max="105000" id="customRange" v-model="priceFilter" step="5000">
+                                    <input type="range" class="form-range" min="5000" max="101000" id="customRange" v-model="priceFilter" step="1000">
                                 </div>
                             </div>
                         </div>
@@ -66,7 +66,7 @@
                             </h2>
                             <div id="aptList" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                 <div class="accordion-body aptListBody" style="overflow:auto; height:242px">
-                                    <AptList :priceFilter="priceFilter" :finalDongCode="finalInfo.dongCode"/>
+                                    <AptList :priceFilter="priceFilter" :finalDongCode="finalInfo.dongCode" @make-aptmarker="makeAptMarker" @Move-Apt="moveApt"/>
                                 </div>
                             </div>
                         </div>
@@ -110,7 +110,7 @@ export default {
             mart:"",
             cafe:"",
             bank:"",
-            priceFilter:"105000",
+            priceFilter:"101000",
         };
     },
     mounted() {
@@ -147,7 +147,7 @@ export default {
             var container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
             var options = { //지도를 생성할 때 필요한 기본 옵션
                 center: new kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
-                level: 3 //지도의 레벨(확대, 축소 정도)
+                level: 5 //지도의 레벨(확대, 축소 정도)
             };
             this.placeOverlay = new kakao.maps.CustomOverlay({zIndex:1});
             this.map = new kakao.maps.Map(container, options);
@@ -285,18 +285,25 @@ export default {
             }
         },
         addMarker(position, order) {
-            var imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_category.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
-                imageSize = new kakao.maps.Size(27, 28),  // 마커 이미지의 크기
-                imgOptions =  {
-                    spriteSize : new kakao.maps.Size(72, 208), // 스프라이트 이미지의 크기
-                    spriteOrigin : new kakao.maps.Point(46, (order*36)), // 스프라이트 이미지 중 사용할 영역의 좌상단 좌표
-                    offset: new kakao.maps.Point(11, 28) // 마커 좌표에 일치시킬 이미지 내에서의 좌표
-                },
-                markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imgOptions),
+            let imageSrc = ''; // 마커 이미지 url, 스프라이트 이미지를 씁니다
+            if(order==1){
+                imageSrc = require("@/assets/img/marker/bigmart.png");
+            } else if (order==5) {
+                imageSrc = require('@/assets/img/marker/mart.png');
+            } else if (order==0) {
+                imageSrc = require('@/assets/img/marker/bank.png');
+            } else {
+                imageSrc = require('@/assets/img/marker/cafe.png');
+            }
+
+            let imageSize = new kakao.maps.Size(33, 44),  // 마커 이미지의 크기
+                markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize),
                     marker = new kakao.maps.Marker({
                     position: position, // 마커의 위치
                     image: markerImage 
                 });
+
+            // 1 : 대형마트, 5 : 편의점, 0: 은행, 4: 카페
             if(order==1){
                 this.markers[0].push(marker);  // 배열에 생성된 마커를 추가합니다
             } else if (order==5) {
@@ -326,6 +333,43 @@ export default {
             this.placeOverlay.setPosition(new kakao.maps.LatLng(place.y, place.x));
             this.placeOverlay.setMap(this.map);  
         },
+        makeAptMarker(aptnamelist) {
+            for(let i=0; i<this.markers[4].length; i++){
+                this.markers[4][i].setMap(null);
+            }
+            this.markers[4]=[];
+
+            if(aptnamelist){
+                for(let i in aptnamelist){
+                    let locPosition = new kakao.maps.LatLng(aptnamelist[i].lat, aptnamelist[i].lng);
+                    
+                    let imageSrc = require('@/assets/img/marker/house.png');
+                    let imageSize = new kakao.maps.Size(33,44);
+                    let markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+                    
+                    let marker = new kakao.maps.Marker({
+                        map: this.map,
+                        position: locPosition,
+                        image: markerImage
+                    });
+                    this.markers[4].push(marker);
+                    ((marker, aptitem) => {
+                        kakao.maps.event.addListener(marker, 'click', () => {
+                            this.aptmodal(aptitem);
+                        });
+                    })(marker, aptnamelist[i]);
+                }
+            }
+        },
+        aptmodal(aptitem){
+            // console.log("aptitem 보내기 전 json: " + JSON.stringify(aptitem));
+            this.$emit('request-modal', aptitem);
+        },
+        moveApt(item) {
+            let locPosition = new kakao.maps.LatLng(item.lat,item.lng);
+            this.map.setCenter(locPosition);
+            this.map.setLevel(1);
+        }
     },
     watch:{
         finalInfo:{ 
@@ -334,6 +378,7 @@ export default {
                 // console.log("MapView.vue - finalInfo 바뀜")
                 this.removeCategoryMarker();
                 this.removeInfoWindo();
+                this.makeAptMarker();
                 // 주소로 좌표를 검색, 이름이 있을때만(초기화 해서 이름이 없으면 진행 안함)
                 if(newData.name){
                     this.geocoder.addressSearch(newData.name, (result, status) => {
@@ -404,7 +449,12 @@ export default {
         width: 100%;
         height: 100%;
     }
-    
+    @media (max-width:1199px){
+        #map {
+            width: 100vw;
+            margin-left: 2px;
+        }
+    }
     .accordion-button, .form-check-label, .customRangeLabel{
         font-family: 'GmarketSansMedium', sans-serif;
         font-size: 15px;
