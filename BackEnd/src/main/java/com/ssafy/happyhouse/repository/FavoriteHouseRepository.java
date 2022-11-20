@@ -17,6 +17,6 @@ public interface FavoriteHouseRepository extends JpaRepository<FavoriteHouse, Lo
 
     FavoriteHouse save(FavoriteHouse favoriteHouse);
 
-    @Query("select HouseInfo.aptCode, count(User) as cnt from FavoriteHouse f group by f.houseInfo order by cnt")
-    List<FavoriteRankDTO> findRank();
+//    @Query("select HouseInfo.aptCode, count(User) as cnt from FavoriteHouse f group by f.houseInfo order by cnt")
+//    List<FavoriteRankDTO> findRank();
 }

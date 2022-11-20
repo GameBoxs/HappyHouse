@@ -18,6 +18,8 @@ import java.util.List;
 @RequestMapping("/boards")
 public class BoardController {
 
+    //TODO : 로그인한 유저만 들어오는 처리
+
     private final BoardService boardService;
 
     @GetMapping

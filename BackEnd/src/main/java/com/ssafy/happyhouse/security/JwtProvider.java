@@ -1,12 +1,14 @@
 package com.ssafy.happyhouse.security;
 
-import com.ssafy.happyhouse.domain.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.security.Key;
@@ -14,9 +16,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-//@Component
+@Slf4j
+@Component
 public class JwtProvider {
-//    @Value("${jwt.secret-key}")
+    @Value("${jwt.secret-key}")
     private String secretKey;
 
 
@@ -34,7 +37,7 @@ public class JwtProvider {
     }
 
     private Claims extractAllClaims(String token) {
-        if (StringUtils.isEmpty(token)) return null;
+        if (!StringUtils.hasText(token)) return null;
         String secretKeyEncodeBase64 = Encoders.BASE64.encode(secretKey.getBytes());
         Claims claims = null;
         try {
@@ -48,12 +51,12 @@ public class JwtProvider {
     public String extractUsername(String token) {
         final Claims claims = extractAllClaims(token);
         if (claims == null) return null;
-        else return claims.get("username",String.class);
+        else return claims.get("userEmail", String.class);
     }
 
-    public String generateToken(User user) {
+    public String generateToken(String email) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("userEmail", user.getEmail());
+        claims.put("userEmail", email);
         return createToken(claims);
     }
 }

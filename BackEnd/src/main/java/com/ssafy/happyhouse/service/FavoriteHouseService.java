@@ -42,9 +42,9 @@ public class FavoriteHouseService {
         return favoriteHouseRepository.existsByUser_IdAndHouseInfo_AptCode(userId, aptCode);
     }
 
-    public List<FavoriteRankDTO> findRank() {
-        return favoriteHouseRepository.findRank().stream()
-                .limit(10)
-                .collect(Collectors.toList());
-    }
+//    public List<FavoriteRankDTO> findRank() {
+//        return favoriteHouseRepository.findRank().stream()
+//                .limit(10)
+//                .collect(Collectors.toList());
+//    }
 }

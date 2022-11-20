@@ -24,6 +24,6 @@ public class LogInterceptor implements HandlerInterceptor {
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         String uuid = (String) request.getAttribute("uuid");
         String requestURI = request.getRequestURI();
-        log.info("REQUEST [{}][{}]", uuid, requestURI);
+        log.info("RESPONSE [{}][{}]", uuid, requestURI);
     }
 }

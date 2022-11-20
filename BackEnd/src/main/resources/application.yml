@@ -12,4 +12,11 @@ spring:
         show_sql: true
   main:
     allow-bean-definition-overriding: true
-#  secret-key: test
+
+jwt:
+  secret-key : happyHouseTooShortTestConfigTestWTF
+
+logging:
+  level:
+    com.ssafy.happyhouse.controller : debug
+    com.ssafy.happyhouse.interceptor : debug
