@@ -1,7 +1,9 @@
 package com.ssafy.happyhouse.controller;
 
+import com.ssafy.happyhouse.annotation.Login;
 import com.ssafy.happyhouse.domain.dto.BoardDTO;
 import com.ssafy.happyhouse.domain.dto.BoardRegistDTO;
+import com.ssafy.happyhouse.domain.entity.User;
 import com.ssafy.happyhouse.domain.enumurate.BoardType;
 import com.ssafy.happyhouse.service.BoardService;
 import lombok.RequiredArgsConstructor;
@@ -24,20 +26,31 @@ public class BoardController {
 
     @GetMapping
     public List<BoardDTO> boardList(@RequestParam BoardType boardType) {
-        log.info("board type = {}", boardType);
         List<BoardDTO> boards = boardService.findAllByType(boardType);
         return boards;
     }
 
     @PostMapping
-    public void saveBoard(@Validated BoardRegistDTO boardRegistDTO, @RequestParam Long userId) throws IOException {
-        log.info("boardRegistDTO = {}", boardRegistDTO);
-        Long boardId = boardService.save(userId, boardRegistDTO);
+    public void saveBoard(@Validated BoardRegistDTO boardRegistDTO, @Login User user) throws IOException {
+        if (user == null) {
+            throw new IllegalArgumentException("NO USER");
+        }
+        Long boardId = boardService.save(user.getId(), boardRegistDTO);
     }
 
     @GetMapping("/{boardId}")
-    public BoardDTO findBoardById(@PathVariable Long boardId, @RequestParam(required = false) Long userId) {
-        log.info("boardID = {}, userId ={}", boardId, userId);
+    public BoardDTO findBoardById(@PathVariable Long boardId, @Login User user) {
+        Long userId =
+                user == null
+                        ? null
+                        : user.getId();
+
         return boardService.findByBoardId(userId, boardId);
     }
+
+    @PatchMapping("/{boardId}")
+    public BoardDTO updateBoard(@PathVariable Long boardId, @ModelAttribute BoardDTO boardDTO, @Login User user) {
+        return boardService.updateBoard(user, boardDTO);
+    }
+
 }

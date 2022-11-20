@@ -6,10 +6,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface VisitRepository extends JpaRepository<Visit, Long> {
     Visit save(Visit visit);
 
-    List<User> findAllByBoard_Id(Long boardId);
+    List<Visit> findAllByBoard_Id(Long boardId);
+
+    Optional<Visit> findByBoard_IdAndUser_Id(Long boardId, Long userId);
 }
