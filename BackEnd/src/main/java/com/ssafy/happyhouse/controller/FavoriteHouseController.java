@@ -30,7 +30,7 @@ public class FavoriteHouseController {
                 .build();
     }
 
-    @PostMapping("/aptCode")
+    @PostMapping("/{aptCode}")
     public void addFavorite(@PathVariable Long aptCode, @Login User user) {
         favoriteHouseService.save(user.getId(), aptCode);
     }
