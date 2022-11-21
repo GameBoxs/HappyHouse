@@ -14,17 +14,17 @@
                     <div class="failnameText text-center"> {{failnameText}} </div>
                     <div class="form-field d-flex align-items-center">
                         <span class="far fa-user"></span>
-                        <input type="text" name="name" :value="userName" id="userName" placeholder="Name" @input="changeName" @keyup="checkname" @keydown.enter.prevent>
+                        <input type="text" name="name" :value="userName" id="userName" placeholder="Name" @input="changeName" @keyup="checkname" @keydown.enter.prevent autocomplete="off">
                     </div>
                     <div class="failnameText text-center"> {{failemailText}} </div>
                     <div class="form-field d-flex align-items-center">
                         <span class="far fa-envelope"></span>
-                        <input type="email" name="email" :value="userEmail" id="userEmail" placeholder="E-mail" @input="changeEmail" @keyup="checkemail" @keydown.enter.prevent>
+                        <input type="email" name="email" :value="userEmail" id="userEmail" placeholder="E-mail" @input="changeEmail" @keyup="checkemail" @keydown.enter.prevent autocomplete="off">
                     </div>
                     <div class="failnameText text-center"> {{failpwdText}} </div>
                     <div class="form-field d-flex align-items-center">
                         <span class="fas fa-key"></span>
-                        <input type="password" name="password" :value="pwd" id="pwd" placeholder="Password" @input="changePwd" @keyup="checkpwd" @keydown.enter.prevent>
+                        <input type="password" name="password" :value="pwd" id="pwd" placeholder="Password" @input="changePwd" @keyup="checkpwd" @keydown.enter.prevent autocomplete="off">
                     </div>
                     <button class="btn mt-2" @click="goSign">가입하기</button>
                 </form>
@@ -123,7 +123,7 @@ export default {
             http.post(url,{name:this.userName, email:this.userEmail, password:this.pwd})
             .then(({data}) => {
                 console.log(data);
-                this.$router.push({ name: "login"});
+                this.$router.replace({ name: "login"});
             })
             .catch(() => {
                 alert('중복된 이메일 입니다.');

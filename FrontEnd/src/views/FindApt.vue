@@ -1,6 +1,6 @@
 <template>
     <div class="findaptmain">
-        <div class="black-bg" v-if="isModalOpen" @click="modalClose($event)" id='black-bg'>
+        <div class="black-bg" v-if="isModalOpen" @mousedown="modalClose($event)" id='black-bg'>
             <div class="white-bg">
                 <AptModal :lat="requestItem.lat" :lng="requestItem.lng" :aptcode="requestItem.aptCode" :aptname="requestItem.aptname"/>
             </div>

@@ -13,11 +13,11 @@
                 <form class="p-3 mt-3" v-on:submit.prevent>
                     <div class="form-field d-flex align-items-center">
                         <span class="far fa-envelope"></span>
-                        <input type="text" name="userEmail" id="userEmail" placeholder="E-mail" v-model="userEmail">
+                        <input type="email" name="userEmail" id="userEmail" placeholder="E-mail" :value="userEmail" @input="changeEmail" autocomplete="off" @keydown.enter.prevent>
                     </div>
                     <div class="form-field d-flex align-items-center">
                         <span class="fas fa-key"></span>
-                        <input type="password" name="password" id="pwd" placeholder="Password" v-model="password">
+                        <input type="password" name="password" id="pwd" placeholder="Password" :value="password" @input="changePassword" autocomplete="off">
                     </div>
                     <button class="btn mt-3" @click="login">로그인</button>
                 </form>
@@ -45,6 +45,12 @@ export default {
     },
 
     methods: {
+        changeEmail(e) {
+            this.userEmail = e.target.value;
+        },
+        changePassword(e) {
+            this.password = e.target.value;
+        },
         login() {
             let url = 'users/login';
             http.post(url,{email:this.userEmail, password:this.password})
@@ -53,7 +59,7 @@ export default {
                 this.$router.push({name:'home'});
             })
             .catch(() => {
-                alert('로그인에 실패 했습니다.');
+                alert('이메일 또는 패스워드가 틀립니다.');
             })
         },
     },

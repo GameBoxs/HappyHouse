@@ -3,7 +3,9 @@ import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import UserView from '@/views/UserView.vue'
 import FindApt from '@/views/FindApt.vue'
-
+import BoardView from '@/views/BoardView.vue'
+import NoticeList from '@/components/Function/board/NoticeList.vue'
+import QnaList from '@/components/Function/board/QnaList.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -32,6 +34,23 @@ const routes = [
     path: '/apt',
     name: 'apt',
     component: FindApt,
+  },
+  {
+    path: '/board',
+    name: 'board',
+    component: BoardView,
+    children: [
+      {
+        path: 'noticelist',
+        name: 'noticelist',
+        component: NoticeList
+      },
+      {
+        path: 'qnalist',
+        name: 'qnalist',
+        component: QnaList
+      },
+    ],
   },
   // {
   //   path: '/about',
