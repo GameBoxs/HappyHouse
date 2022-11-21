@@ -10,33 +10,50 @@
                 <div class="text-center mt-4 name">
                     SignUp
                 </div>
-                <form class="p-3 mt-3">
+                <form class="p-3" v-on:submit.prevent>
+                    <div class="failnameText text-center"> {{failnameText}} </div>
                     <div class="form-field d-flex align-items-center">
                         <span class="far fa-user"></span>
-                        <input type="text" name="userName" id="userName" placeholder="Name">
+                        <input type="text" name="name" :value="userName" id="userName" placeholder="Name" @input="changeName" @keyup="checkname" @keydown.enter.prevent>
                     </div>
+                    <div class="failnameText text-center"> {{failemailText}} </div>
                     <div class="form-field d-flex align-items-center">
                         <span class="far fa-envelope"></span>
-                        <input type="text" name="userEmail" id="userEmail" placeholder="E-mail">
+                        <input type="email" name="email" :value="userEmail" id="userEmail" placeholder="E-mail" @input="changeEmail" @keyup="checkemail" @keydown.enter.prevent>
                     </div>
+                    <div class="failnameText text-center"> {{failpwdText}} </div>
                     <div class="form-field d-flex align-items-center">
                         <span class="fas fa-key"></span>
-                        <input type="password" name="password" id="pwd" placeholder="Password">
+                        <input type="password" name="password" :value="pwd" id="pwd" placeholder="Password" @input="changePwd" @keyup="checkpwd" @keydown.enter.prevent>
                     </div>
-                    <button class="btn mt-2">가입하기</button>
+                    <button class="btn mt-2" @click="goSign">가입하기</button>
                 </form>
+
             </div>
         </div>
+        
     </div>
 </template>
 
 <script>
+import http from '@/api/http'
 export default {
     name: 'SignUpView',
 
     data() {
         return {
-            
+            userName: '',
+            userEmail: '',
+            pwd: '',
+            failname:false,
+            failemail:false,
+            failpwd:false,
+            passname:false,
+            passemail:false,
+            passpwd:false,
+            failnameText:"",
+            failemailText:"",
+            failpwdText:"",
         };
     },
 
@@ -45,7 +62,73 @@ export default {
     },
 
     methods: {
-        
+        checkname() {
+            // eslint-disable-next-line
+            let namecheck = /^[가-힣]{2,6}$/;
+            if(this.userName < 1 || this.userName > 7 || namecheck.test(this.userName) == false){
+                this.failname=true;
+                this.passname=false;
+                this.failnameText="2~6자 이내로 올바르게 작성!!"
+            } else if(namecheck.test(this.userName) == true) {
+                this.failname=false;
+                this.passname=true;
+                this.failnameText=" ";
+            }
+        },
+        changeName(e) {
+            this.userName = e.target.value;
+        },
+        checkemail() {
+            // eslint-disable-next-line
+            let emailcheck = /^[a-z0-9\.\-_]+@([a-z0-9\-]+\.)+[a-z]{2,6}$/;
+            if(emailcheck.test(this.userEmail)==false){
+                this.failemail = true;
+                this.passemail = false;
+                this.failemailText="이메일 형식을 올바르게 작성!!"
+            } else {
+                this.failemail = false;
+                this.passemail = true;
+                this.failemailText=" ";
+            }
+        },
+        changeEmail(e) {
+            this.userEmail = e.target.value;
+        },
+        checkpwd() {
+            // eslint-disable-next-line
+            let pwdcheck = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*]{4,20}$/;
+            if(this.pwd < 4){
+                this.failpwd = true;
+                this.passpwd = false;
+                this.failpwdText = '4글자 이상 입력!!';
+            } else if(pwdcheck.test(this.pwd) == false){
+                this.failpwd = true;
+                this.passpwd = false;
+                this.failpwdText = "문자,숫자가 최소 1개 이상 필요!!";
+            } else if(pwdcheck.test(this.pwd) == true) {
+                this.failpwd = false;
+                this.passpwd = true;
+                this.failpwdText = " ";
+            }
+        },
+        changePwd(e) {
+            this.pwd = e.target.value;
+        },
+        goSign() {
+            if(!this.passname && !this.passemail && !this.passpwd) {
+                alert('양식에 맞게 올바르게 입력해 주세요!');
+                return;
+            }
+            let url = "users";
+            http.post(url,{name:this.userName, email:this.userEmail, password:this.pwd})
+            .then(({data}) => {
+                console.log(data);
+                this.$router.push({ name: "login"});
+            })
+            .catch(() => {
+                alert('중복된 이메일 입니다.');
+            })
+        },
     },
 };
 </script>
@@ -141,7 +224,11 @@ button, .name{
     padding-left: 10px;
     color: #555;
 }
-
+.failnameText {
+    color: rgba(248, 51, 51, 0.932);
+    font-size: 15px;
+    font-family: 'Noto Sans KR', sans-serif;
+}
 .wrapper .form-field input {
     width: 100%;
     display: block;
@@ -160,6 +247,7 @@ button, .name{
     border-radius: 20px;
     box-shadow: inset 8px 8px 8px #cbced1, inset -8px -8px 8px #fff;
 }
+
 
 .wrapper .form-field .fas {
     color: #555;

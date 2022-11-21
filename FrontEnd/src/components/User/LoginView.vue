@@ -10,16 +10,16 @@
                 <div class="text-center mt-4 name">
                     LogIn
                 </div>
-                <form class="p-3 mt-3">
+                <form class="p-3 mt-3" v-on:submit.prevent>
                     <div class="form-field d-flex align-items-center">
                         <span class="far fa-envelope"></span>
-                        <input type="text" name="userEmail" id="userEmail" placeholder="E-mail">
+                        <input type="text" name="userEmail" id="userEmail" placeholder="E-mail" v-model="userEmail">
                     </div>
                     <div class="form-field d-flex align-items-center">
                         <span class="fas fa-key"></span>
-                        <input type="password" name="password" id="pwd" placeholder="Password">
+                        <input type="password" name="password" id="pwd" placeholder="Password" v-model="password">
                     </div>
-                    <button class="btn mt-3">로그인</button>
+                    <button class="btn mt-3" @click="login">로그인</button>
                 </form>
                 <div class="text-center fs-6 router">
                     <router-link to="#" class="router">PW 찾기</router-link> or <router-link :to="{name:'signup'}" class="router">가입</router-link>
@@ -30,21 +30,32 @@
 </template>
 
 <script>
+import http from '@/api/http'
 export default {
     name: 'LoginView',
 
     data() {
         return {
-            
+            userEmail:'',
+            password:'',
         };
     },
 
     mounted() {
-        // document.querySelector('.wrapperDiv').style.height = document.querySelector('.loginBody').style.height-100+'px';
     },
 
     methods: {
-        
+        login() {
+            let url = 'users/login';
+            http.post(url,{email:this.userEmail, password:this.password})
+            .then(() => {
+                this.$store.dispatch('setisLogin',true);
+                this.$router.push({name:'home'});
+            })
+            .catch(() => {
+                alert('로그인에 실패 했습니다.');
+            })
+        },
     },
 };
 </script>

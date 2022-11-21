@@ -31,7 +31,7 @@ export default {
 
   methods: {
     readAptList() {
-        let url = 'housedeal/'+this.finalDongCode;
+        let url = 'housedeal/dongcode/'+this.finalDongCode;
         console.log(url);
         http.get(url)
         .then((response) => {
@@ -64,6 +64,8 @@ export default {
     makeAptList() {
       if(this.aptnamelist){
         this.$emit('make-aptmarker', this.aptnamelist);
+      } else{
+        this.$emit('make-aptmarker', null);
       }
     },
     moveToApt(item){
@@ -86,6 +88,7 @@ export default {
         else{
             this.aptlist=[];
             this.aptnamelist=[];
+            this.makeAptList();
         }
     },
     priceFilter() {

@@ -66,7 +66,7 @@
                             </h2>
                             <div id="aptList" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                 <div class="accordion-body aptListBody" style="overflow:auto; height:242px">
-                                    <AptList :priceFilter="priceFilter" :finalDongCode="finalInfo.dongCode" @make-aptmarker="makeAptMarker" @Move-Apt="moveApt"/>
+                                    <AptList :priceFilter="priceFilter" :finalDongCode="finalInfo.dongCode" @make-aptmarker="setAptList" @Move-Apt="moveApt"/>
                                 </div>
                             </div>
                         </div>
@@ -111,6 +111,7 @@ export default {
             cafe:"",
             bank:"",
             priceFilter:"101000",
+            aptList:null,
         };
     },
     mounted() {
@@ -224,7 +225,7 @@ export default {
             }
         },
         searchPlaces() {
-            if (this.bigmart==false && this.mart==false && this.bank==false && this.cafe==false) {
+            if (this.bigmart==false && this.mart==false && this.bank==false && this.cafe==false && this.aptList==null) {
                 return;
             }
             
@@ -244,6 +245,9 @@ export default {
             }
             if(this.cafe==true){
                 this.ps.categorySearch('CE7', this.placesSearchCB, {useMapBounds:true}); 
+            }
+            if(this.aptList!=null){
+                this.makeAptMarker(this.aptList);
             }
         },
         placesSearchCB(data, status) {
@@ -333,12 +337,12 @@ export default {
             this.placeOverlay.setPosition(new kakao.maps.LatLng(place.y, place.x));
             this.placeOverlay.setMap(this.map);  
         },
+        setAptList(aptnamelist) {
+            this.aptList = null;
+            this.aptList = aptnamelist;
+            this.searchPlaces();
+        },
         makeAptMarker(aptnamelist) {
-            for(let i=0; i<this.markers[4].length; i++){
-                this.markers[4][i].setMap(null);
-            }
-            this.markers[4]=[];
-
             if(aptnamelist){
                 for(let i in aptnamelist){
                     let locPosition = new kakao.maps.LatLng(aptnamelist[i].lat, aptnamelist[i].lng);
@@ -378,7 +382,7 @@ export default {
                 // console.log("MapView.vue - finalInfo 바뀜")
                 this.removeCategoryMarker();
                 this.removeInfoWindo();
-                this.makeAptMarker();
+                // this.makeAptMarker();
                 // 주소로 좌표를 검색, 이름이 있을때만(초기화 해서 이름이 없으면 진행 안함)
                 if(newData.name){
                     this.geocoder.addressSearch(newData.name, (result, status) => {

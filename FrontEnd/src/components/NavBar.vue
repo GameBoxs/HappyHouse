@@ -11,7 +11,8 @@
           Menu
           <i class="fas fa-bars ms-1"></i>
         </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
+
+        <div class="collapse navbar-collapse" id="navbarResponsive" v-if="this.$store.getters.isLogin==false">
           <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
             <li class="nav-item"><router-link class="nav-link" to="/"><span class="navspan">홈</span></router-link></li>
             <li class="nav-item"><a class="nav-link" href="#services"><span class="navspan">공지사항</span></a></li>
@@ -27,6 +28,20 @@
               <router-link :to="{name:'login'}" class="btn btn-default btn-sm text-white">
                 <i class="fa fs-5 fa-lock pr-2 fa-shake" style="--fa-animation-duration: 2s;"></i> <span class="navspan">Login</span>
               </router-link>
+            </li>
+          </ul>
+        </div>
+        <div class="collapse navbar-collapse" id="navbarResponsive" v-else>
+          <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
+            <li class="nav-item"><router-link class="nav-link" to="/"><span class="navspan">홈</span></router-link></li>
+            <li class="nav-item"><a class="nav-link" href="#services"><span class="navspan">공지사항</span></a></li>
+            <li class="nav-item"><a class="nav-link" href="#portfolio"><span class="navspan">Q&A</span></a></li>
+            <li class="nav-item"><router-link class="nav-link" :to="{name:'apt'}"><span class="navspan">아파트 매매 찾기</span></router-link></li>
+            <li class="nav-item"><a class="nav-link" href="#team"><span class="navspan">오늘의 뉴스</span></a></li>
+            <li class="nav-item">
+              <div @click="logout" class="btn btn-default btn-sm text-white">
+                <i class="fa fs-5 fa-lock pr-2 fa-shake" style="--fa-animation-duration: 2s;"></i> <span class="navspan">Logout</span>
+              </div>
             </li>
           </ul>
         </div>
@@ -81,7 +96,10 @@ export default {
   },
 
   methods: {
-    
+    logout(){
+      this.$store.dispatch('setisLogin',false);
+      this.$router.push({name:'home'});
+    },
   },
 };
 </script>
