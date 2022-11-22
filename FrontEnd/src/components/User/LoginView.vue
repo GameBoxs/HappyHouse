@@ -58,17 +58,13 @@ export default {
             http.post(url,{email:this.userEmail, password:this.password})
             .then(() => {
                 let token = this.get_cookie("JWT-Token");
-                console.log("토큰 : " + token);
 
                 let sliceValue = token.split('.')[1];
-                console.log('slice[1] : '+ sliceValue);
 
                 // let payload = Buffer.from(sliceValue.toString(),'base64').toString('utf8');
                 let payload = Buffer.from(sliceValue.toString(),'base64').toString('utf8');
-                console.log('payload : ' + payload);
 
                 let data = JSON.parse(payload.toString());
-                console.log('data : ' + data);
                 return data;
             })
             .then((data)=> {

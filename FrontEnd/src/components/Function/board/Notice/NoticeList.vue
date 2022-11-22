@@ -1,12 +1,17 @@
 <template>
     <div class="container mt-2" style="" id="noticeListDiv">
-        <button class="btn btn-primary mb-3" @click="redirectNoticeList">글 목록</button>
+        <button class="btn btn-primary mb-3 mt-5" @click="redirectNoticeList">글 목록</button>
         <b-table id="boardListTable" striped hover 
             :items="items"
             :per-page="perPage"
             :fields="fields"
             :current-page="1" small
-        ></b-table>
+        >
+            <template #cell(title)="data">
+                <!-- <template @click="test(data.item.id)">{{data.value}} / {{data.item.id}}</template> -->
+                <router-link :to="{path:'noticedetail', query:{id:data.item.id} }"> {{data.value}} </router-link>
+            </template>
+        </b-table>
         <!-- <div class="text-end" v-if="this.$store.getters.getMyRole == 'ADMIN' "> -->
         <div class="row mt-5">
             <div class="col-2"></div>
@@ -165,12 +170,16 @@ export default {
             // this.$router.push({name:'noticelist'});
             window.location.reload(true);
         },
+        test(data) {
+            console.log(data);
+        }
     },
 };
 </script>
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Black+Han+Sans&family=Dongle&family=Jua&family=Noto+Sans+KR&display=swap');
+
 thead th {
     font-family: 'Noto Sans KR', sans-serif;
     font-size: 20px;

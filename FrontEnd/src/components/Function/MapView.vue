@@ -2,7 +2,7 @@
     <div class="mapMainDiv container-fluid">
         <div class="row rowbody">
             <div class="col-2 d-none d-xl-block " style="height:100%; ">
-                <div class="" style="height:390px;">
+                <div class="leftSid" style="height:700px; overflow:auto">
                     <div class="accordion pt-2" id="mapOptionOne">
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="mapOptionItemOneOfOne">
@@ -62,6 +62,22 @@
                             <h2 class="accordion-header" id="aptListH2">
                                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#aptList" aria-expanded="true" aria-controls="collapseOne" style="background-color:white; color:black;">
                                     <span class="" style="width:100%">검색 결과 - 아파트 리스트</span>
+                                </button>
+                            </h2>
+                            <div id="aptList" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                <div class="accordion-body aptListBody" style="overflow:auto; height:242px">
+                                    <AptList :priceFilter="priceFilter" :finalDongCode="finalInfo.dongCode" @make-aptmarker="setAptList" @Move-Apt="moveApt"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 북마크 리스트 만들어야 함 AptList 그대로 복사해서 응용 -->
+                    <div class="accordion pt-2 mb-2" id="mapOptionThree">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="aptListH2">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#aptList" aria-expanded="true" aria-controls="collapseOne" style="background-color:white; color:black;">
+                                    <span class="" style="width:100%">북마크 리스트</span>
                                 </button>
                             </h2>
                             <div id="aptList" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
@@ -561,4 +577,22 @@ export default {
         font-size:11px;
         margin-top:0;
         }
+
+.leftSid::-webkit-scrollbar,
+.leftSid::-webkit-scrollbar-thumb {
+    width: 26px;
+    border-radius: 13px;
+    background-clip: padding-box;
+    border: 10px solid transparent;
+}
+
+.leftSid::-webkit-scrollbar-thumb {        
+    box-shadow: inset 0 0 0 10px;
+}
+.leftSid    {
+    color: rgba(0, 0, 0, 0);
+}
+.leftSid:hover {
+    color: rgba(0, 0, 0, 0.3);
+}
 </style>

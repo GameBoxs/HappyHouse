@@ -4,7 +4,8 @@ import HomeView from '../views/HomeView.vue'
 import UserView from '@/views/UserView.vue'
 import FindApt from '@/views/FindApt.vue'
 import BoardView from '@/views/BoardView.vue'
-import NoticeList from '@/components/Function/board/NoticeList.vue'
+import NoticeList from '@/components/Function/board/Notice/NoticeList.vue'
+import NoticeDetail from '@/components/Function/board/Notice/NoticeDetail.vue'
 import QnaList from '@/components/Function/board/QnaList.vue'
 Vue.use(VueRouter)
 
@@ -44,6 +45,11 @@ const routes = [
         path: 'noticelist',
         name: 'noticelist',
         component: NoticeList
+      },
+      {
+        path: 'noticedetail',
+        name: 'noticedetail',
+        component: NoticeDetail,
       },
       {
         path: 'qnalist',
