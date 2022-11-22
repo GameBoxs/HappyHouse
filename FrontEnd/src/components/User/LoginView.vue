@@ -30,6 +30,8 @@
 </template>
 
 <script>
+var global = global || window;
+global.Buffer = global.Buffer || require("buffer").Buffer;
 import http from '@/api/http'
 export default {
     name: 'LoginView',
@@ -55,13 +57,36 @@ export default {
             let url = 'users/login';
             http.post(url,{email:this.userEmail, password:this.password})
             .then(() => {
+                let token = this.get_cookie("JWT-Token");
+                console.log("토큰 : " + token);
+
+                let sliceValue = token.split('.')[1];
+                console.log('slice[1] : '+ sliceValue);
+
+                // let payload = Buffer.from(sliceValue.toString(),'base64').toString('utf8');
+                let payload = Buffer.from(sliceValue.toString(),'base64').toString('utf8');
+                console.log('payload : ' + payload);
+
+                let data = JSON.parse(payload.toString());
+                console.log('data : ' + data);
+                return data;
+            })
+            .then((data)=> {
+                this.$store.dispatch('setMyRole', data.role);
+                this.$store.dispatch('setMyName', data.userName);
+                this.$store.dispatch('setMyEmail', data.userEmail);
                 this.$store.dispatch('setisLogin',true);
                 this.$router.push({name:'home'});
             })
-            .catch(() => {
+            .catch((e) => {
+                console.log(e);
                 alert('이메일 또는 패스워드가 틀립니다.');
             })
         },
+        get_cookie(name) {
+            var value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+            return value? value[2] : null;
+        }
     },
 };
 </script>

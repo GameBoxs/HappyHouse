@@ -3,10 +3,10 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import 'bootstrap/dist/css/bootstrap.min.css'
-// import BootstrapVue from 'bootstrap-vue'
-// import 'bootstrap-vue/dist/bootstrap-vue.css'
+import BootstrapVue from 'bootstrap-vue'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 
-// Vue.use(BootstrapVue)
+Vue.use(BootstrapVue)
 Vue.config.productionTip = false
 
 new Vue({

@@ -10,6 +10,7 @@
                             <span class="text-white">{{$route.params.text.substr(1,1)}} </span>
                             <span class="text-primary">{{$route.params.text.substr(2,1)}}</span>
                         </h1>
+                        
                     </div>
                 </div>
             </div>

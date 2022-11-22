@@ -45,6 +45,7 @@
 </template>
 
 <script>
+import http from '@/api/http'
 export default {
   name: 'NavBar',
 
@@ -60,7 +61,14 @@ export default {
 
   methods: {
     logout(){
-      this.$store.dispatch('setisLogin',false);
+      let url = 'users/logout';
+      http.get(url)
+      .then(() => {
+        this.$store.dispatch('setisLogin',false);
+        this.$store.dispatch('setMyRole', "");
+        this.$store.dispatch('setMyName', "");
+        this.$store.dispatch('setMyEmail', "");
+      })
       this.$router.push({name:'home'});
     },
   },
