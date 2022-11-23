@@ -2,7 +2,7 @@
     <div class="findaptmain">
         <div class="black-bg" v-if="isModalOpen" @mousedown="modalClose($event)" id='black-bg'>
             <div class="white-bg">
-                <AptModal :lat="requestItem.lat" :lng="requestItem.lng" :aptcode="requestItem.aptcode" :aptname="requestItem.name"/>
+                <AptModal :lat="requestItem.lat" :lng="requestItem.lng" :aptcode="requestItem.aptcode" :aptname="requestItem.name" @Change-Keys="changekey"/>
             </div>
         </div>
         <div class="bg-image">
@@ -57,7 +57,7 @@
         </div>
         <div class="aptBodyDiv container-fluid">
             <div class="aptBody rounded-3 mx-auto">
-                <MapView :finalInfo="finalInfo" @request-modal="RequestModal"/>
+                <MapView :finalInfo="finalInfo" @request-modal="RequestModal" :keys="keys"/>
             </div>
         </div>
         <div class="space">
@@ -83,6 +83,7 @@ export default {
             },
             isModalOpen:false,
             requestItem:null,
+            keys:1,
         };
     },
 
@@ -184,6 +185,9 @@ export default {
     },
 
     methods: {
+        changekey() {
+            this.keys = Math.floor(Math.random() * 100);
+        },
         resetAll() {
             this.sido = 'all';
 

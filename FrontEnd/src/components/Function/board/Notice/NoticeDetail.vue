@@ -99,7 +99,6 @@
 
 <script>
 import http from '@/api/http'
-import cookie from '@/api/checkCookie'
 export default {
     name: 'NoticeDetail',
 
@@ -133,14 +132,6 @@ export default {
 
     methods: {
         goCreate() {
-            if(cookie.get_cookie == null){
-                alert('로그인 세션이 만료되었습니다. 다시 로그인해 주세요!');
-                this.$store.dispatch('setisLogin',false);
-                this.$store.dispatch('setMyRole', "");
-                this.$store.dispatch('setMyName', "");
-                this.$store.dispatch('setMyEmail', "");
-                return;
-            }
             this.$router.push({name:'noticewrite'});
         },
         deleteNotice(id) {
@@ -154,6 +145,10 @@ export default {
                 .catch((error) => {
                     if(error.response.status==403){
                         alert('로그인 세션이 만료되었습니다. 다시 로그인해 주세요!');
+                        this.$store.dispatch('setisLogin',false);
+                        this.$store.dispatch('setMyRole', "");
+                        this.$store.dispatch('setMyName', "");
+                        this.$store.dispatch('setMyEmail', "");
                         this.$router.replace({name:'home'});
                     } else{
                         console.log(error);
@@ -163,14 +158,6 @@ export default {
             }
         },
         goNoticeEdit(id) {
-            if(cookie.get_cookie == null){
-                alert('로그인 세션이 만료되었습니다. 다시 로그인해 주세요!');
-                this.$store.dispatch('setisLogin',false);
-                this.$store.dispatch('setMyRole', "");
-                this.$store.dispatch('setMyName', "");
-                this.$store.dispatch('setMyEmail', "");
-                return;
-            }
             this.$router.replace({name:'noticeedit', query:{id:id}});
         },
         goNoticeList() {
@@ -181,14 +168,15 @@ export default {
                 let url = '/comments/'+id;
                 http.delete(url)
                 .then(() =>{
-                    window.location.reload(true);
+                    // window.location.reload(true);
+                    this.$router.go();
                     alert('삭제 성공!');
                 })
                 .catch((error) => {
                     if(error.response.status==403){
                     alert('로그인 세션이 만료되었습니다. 다시 로그인해 주세요!');
                     this.$router.replace({name:'home'});
-                } else{
+                    } else{
                         console.log(error);
                         this.$router.replace({name:'noticelist'});
                         alert('댓글 삭제 실패!!');

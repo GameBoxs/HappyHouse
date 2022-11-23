@@ -82,7 +82,7 @@
                             </h2>
                             <div id="aptList" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                 <div class="accordion-body aptListBody" style="overflow:auto; height:242px">
-                                    <AptList :priceFilter="priceFilter" :finalDongCode="finalInfo.dongCode" @make-aptmarker="setAptList" @Move-Apt="moveApt"/>
+                                    <BookMarkList :keys="bookrerenderkey" @make-aptmarker="setBookList" @Move-Apt="moveApt"/>
                                 </div>
                             </div>
                         </div>
@@ -99,10 +99,12 @@
 
 <script>
 import AptList from '@/components/Function/Apt/AptList.vue'
+import BookMarkList from '@/components/Function/Apt/BookMarkList.vue' 
 export default {
     name: 'MapView',
     components: {
         AptList,
+        BookMarkList,
     },
     props:{
         finalInfo: {
@@ -111,6 +113,7 @@ export default {
                 return {};
             },
         },
+        keys:Number,
     },
     data() {
         return {
@@ -118,7 +121,7 @@ export default {
             placeOverlay:null,
             ps:null,
             contentNode:document.createElement('div'),
-            markers:[[],[],[],[],[]],
+            markers:[[],[],[],[],[],[]],
             infows:[],
             locPosition:"",
             geocoder:null,
@@ -128,6 +131,9 @@ export default {
             bank:"",
             priceFilter:"101000",
             aptList:null,
+            tempAptList:null,
+            bookList:null,
+            bookrerenderkey:1,
         };
     },
     mounted() {
@@ -228,12 +234,12 @@ export default {
             }
         },
         removeCategoryMarker(){
-            for(let i=0; i<5; i++){
+            for(let i=0; i<6; i++){
                 for(var j = 0; j < this.markers[i].length; j++){
                     this.markers[i][j].setMap(null);
                 }
             }
-            this.markers = [[],[],[],[],[]];
+            this.markers = [[],[],[],[],[],[]];
         },
         turnOffCategoryMarker(index){
             for(var i = 0; i < this.markers[index].length; i++){
@@ -241,7 +247,7 @@ export default {
             }
         },
         searchPlaces() {
-            if (this.bigmart==false && this.mart==false && this.bank==false && this.cafe==false && this.aptList==null) {
+            if (this.bigmart==false && this.mart==false && this.bank==false && this.cafe==false && !this.aptList && !this.bookList) {
                 return;
             }
             
@@ -262,8 +268,11 @@ export default {
             if(this.cafe==true){
                 this.ps.categorySearch('CE7', this.placesSearchCB, {useMapBounds:true}); 
             }
-            if(this.aptList!=null){
+            if(this.aptList.length>0){
                 this.makeAptMarker(this.aptList);
+            }
+            if(this.bookList.length>0){
+                this.makeBookMarker(this.bookList);
             }
         },
         placesSearchCB(data, status) {
@@ -354,9 +363,33 @@ export default {
             this.placeOverlay.setMap(this.map);  
         },
         setAptList(aptnamelist) {
-            this.aptList = null;
-            this.aptList = aptnamelist;
-            this.searchPlaces();
+            this.aptList = [];
+            console.log('MapView.vue 366 aptnamelist : ' + JSON.stringify(aptnamelist) + 'bookList : ' + this.bookList);
+            if(aptnamelist){
+                if(this.bookList.length>0){
+                    this.tempAptList = aptnamelist;
+                    let temp = aptnamelist.filter(item1 => this.bookList.some(item2 => item1.name != item2.name))
+                    this.aptList = temp;
+                    console.log('MapView.vue 371 aptList : ' + this.aptList);
+                } else{
+                    if(this.tempAptList){
+                        this.aptList = this.tempAptList;
+                        this.tempAptList = null;
+                    } else {
+                        this.aptList = aptnamelist;
+                    }
+                }
+
+                this.searchPlaces();
+            }
+        },
+        setBookList(booknamelist) {
+            this.bookList = null;
+            if(booknamelist) {
+                this.bookList = booknamelist;
+            }
+            console.log('setBookList MapView 384 : '+this.aptList);
+            this.setAptList(this.aptList);
         },
         makeAptMarker(aptnamelist) {
             if(aptnamelist){
@@ -381,6 +414,29 @@ export default {
                 }
             }
         },
+        makeBookMarker(booknamelist) {
+            if(booknamelist){
+                for(let i in booknamelist){
+                    let locPosition = new kakao.maps.LatLng(booknamelist[i].lat, booknamelist[i].lng);
+                    
+                    let imageSrc = require('@/assets/img/marker/bookmark.png');
+                    let imageSize = new kakao.maps.Size(33,44);
+                    let markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+                    
+                    let marker = new kakao.maps.Marker({
+                        map: this.map,
+                        position: locPosition,
+                        image: markerImage
+                    });
+                    this.markers[5].push(marker);
+                    ((marker, aptitem) => {
+                        kakao.maps.event.addListener(marker, 'click', () => {
+                            this.aptmodal(aptitem);
+                        });
+                    })(marker, booknamelist[i]);
+                }
+            }
+        },
         aptmodal(aptitem){
             // console.log("aptitem 보내기 전 json: " + JSON.stringify(aptitem));
             this.$emit('request-modal', aptitem);
@@ -392,10 +448,14 @@ export default {
         }
     },
     watch:{
+        keys: function() {
+            this.bookrerenderkey = this.keys;
+        },
         finalInfo:{ 
             deep:true,
             handler(newData) {
                 // console.log("MapView.vue - finalInfo 바뀜")
+                this.searchPlaces();
                 this.removeCategoryMarker();
                 this.removeInfoWindo();
                 // this.makeAptMarker();
@@ -406,6 +466,7 @@ export default {
                         if (status === kakao.maps.services.Status.OK) {
                             var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
                             this.map.setCenter(coords);
+                            this.map.setLevel(5);
                         } 
                     });  
                 }

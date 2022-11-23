@@ -32,11 +32,9 @@ export default {
             let url='housedeal/aptcode/'+this.aptcode;
             http.get(url)
             .then(({data}) => {
-                console.log(data);
                 let year = data.map((item) => item.dealYear).reverse();
                 let yearNo = [...new Set(year)];
                 this.yearLabel = yearNo;
-                console.log(year =+ yearNo);
 
                 let result = [];
                 yearNo.forEach((year) => {
@@ -46,7 +44,6 @@ export default {
                                 result.push(max);
                 });
                 this.priceData = result;
-                console.log(result);
                 this.fillData();
             })
         },

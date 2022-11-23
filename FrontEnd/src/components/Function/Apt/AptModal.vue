@@ -14,9 +14,9 @@
             <b-tab title="최근거래" active class="menuItem">
                 <RecentTrade :aptcode="aptcode"/>
             </b-tab>
-            <b-tab title="모든거래" class="menuItem"><p>I'm the second tab</p></b-tab>
+            <b-tab title="모든거래" class="menuItem"><TradeList :aptcode="aptcode"/></b-tab>
             <b-tab title="가격변동" class="menuItem"><PriceChart :aptcode="aptcode"/></b-tab>
-            <b-tab title="순위" class="menuItem"><p>I'm a disabled tab!</p></b-tab>
+            <b-tab title="북마크수" class="menuItem"><p>I'm a disabled tab!</p></b-tab>
         </b-tabs>
     </div>
 </template>
@@ -24,6 +24,7 @@
 <script>
 import RecentTrade from '@/components/Function/Apt/Modal/RecentTrade.vue'
 import PriceChart from '@/components/Function/Apt/Modal/PriceChart.vue'
+import TradeList from '@/components/Function/Apt/Modal/TradeList.vue'
 import http from '@/api/http'
 export default {
     name: 'AptModal',
@@ -31,6 +32,7 @@ export default {
     components: {
         RecentTrade,
         PriceChart,
+        TradeList,
     },
 
     data() {
@@ -73,13 +75,27 @@ export default {
     },
 
     methods: {
+        get_cookie() {
+            var value = document.cookie.match('(^|;) ?' + 'JWT-Token' + '=([^;]*)(;|$)');
+            return value? value[2] : null;
+        },
         clickBookMark() {
-            console.log('북마크 클릭 됨');
+            if(this.get_cookie() == null){
+                alert('로그인 세션 만료!');
+                this.$store.dispatch('setisLogin',false)
+                this.$store.dispatch('setMyRole','')
+                this.$store.dispatch('setMyName','')
+                this.$store.dispatch('setMyEmail','')
+                this.$router.replace({name:'home'});
+                return;
+            }
+            // console.log('북마크 클릭 됨');
             let url = '/favorite/'+this.aptcode;
             if(this.isBookMarked){
                 http.delete(url)
                 .then(() => {
                     this.isBookMarked = false;
+                    this.$emit('Change-Keys');
                 })
                 .catch((error) => {
                     if(error.massage=='삭제할 북마크가 없습니다.'){
@@ -95,6 +111,7 @@ export default {
                 http.post(url)
                 .then(() => {
                     this.isBookMarked = true;
+                    this.$emit('Change-Keys');
                 })
                 .catch((error) => {
                     if(error.response.status==403){

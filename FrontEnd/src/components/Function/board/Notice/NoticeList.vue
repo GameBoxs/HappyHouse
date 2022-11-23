@@ -44,7 +44,6 @@
 
 <script>
 import http from '@/api/http'
-import cookie from '@/api/checkCookie'
 export default {
     name: 'NoticeList',
 
@@ -142,16 +141,7 @@ export default {
     },
     methods: {
         goCreate() {
-            if(cookie.get_cookie == null){
-                alert('로그인 세션이 만료되었습니다. 다시 로그인해 주세요!');
-                this.$store.dispatch('setisLogin',false);
-                this.$store.dispatch('setMyRole', "");
-                this.$store.dispatch('setMyName', "");
-                this.$store.dispatch('setMyEmail', "");
-                return;
-            }else{
-                this.$router.push({name:'noticewrite'});
-            }
+            this.$router.push({name:'noticewrite'});
         },
         searchStart(){
             let url = 'boards/search?title='+ this.searchText;
