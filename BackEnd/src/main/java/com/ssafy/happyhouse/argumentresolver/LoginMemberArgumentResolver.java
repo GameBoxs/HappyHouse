@@ -2,12 +2,13 @@ package com.ssafy.happyhouse.argumentresolver;
 
 import com.ssafy.happyhouse.annotation.Login;
 import com.ssafy.happyhouse.domain.entity.User;
-import com.ssafy.happyhouse.interceptor.JwtConst;
+import com.ssafy.happyhouse.security.JwtConst;
 import com.ssafy.happyhouse.repository.UserRepository;
 import com.ssafy.happyhouse.security.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -19,6 +20,7 @@ import java.util.Arrays;
 
 @Slf4j
 @RequiredArgsConstructor
+@Component
 public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolver {
 
     private final JwtProvider jwtProvider;
@@ -35,6 +37,10 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
+
+        if (request.getCookies() == null) {
+            return null;
+        }
 
         Cookie jwtCookie = Arrays.stream(request.getCookies())
                 .filter(cookie -> cookie.getName().equals(JwtConst.JWT_HEADER))

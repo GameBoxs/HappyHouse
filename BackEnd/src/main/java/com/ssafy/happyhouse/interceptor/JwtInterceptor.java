@@ -1,10 +1,13 @@
 package com.ssafy.happyhouse.interceptor;
 
 import com.ssafy.happyhouse.domain.entity.User;
+import com.ssafy.happyhouse.exception.AuthenticationRequiredException;
 import com.ssafy.happyhouse.repository.UserRepository;
+import com.ssafy.happyhouse.security.JwtConst;
 import com.ssafy.happyhouse.security.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.Cookie;
@@ -23,23 +26,26 @@ public class JwtInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String requestURI = request.getRequestURI();
 
+        if (HttpMethod.OPTIONS.matches(request.getMethod())) {
+            return true;
+        }
+
         log.info("JWT [{}]", requestURI);
 
-        //쿠기가 없으면 리턴
+        //쿠기가 아예 없으면
         if (request.getCookies() == null) {
             log.debug("NO COOKIES");
-//            response.sendRedirect("/users/login?redirect=" + requestURI);
-            return false;
+            throw new AuthenticationRequiredException("로그인이 필요합니다.");
         }
+
         Optional<Cookie> jwt = Arrays.stream(request.getCookies())
                 .filter(cookie -> cookie.getName().equals(JwtConst.JWT_HEADER))
                 .findFirst();
 
-        //토큰이 없으면 로그인 페이지로 리다이렉트
+        //jwt 쿠키가 없으면
         if (jwt.isEmpty()) {
             log.debug("NO TOKEN REDIRECT [{}]", requestURI);
-//            response.sendRedirect("/users/login?redirect=" + requestURI);
-            return false;
+            throw new AuthenticationRequiredException("로그인이 필요합니다.");
         }
 
         String token = jwt.get().getValue();
@@ -47,10 +53,10 @@ public class JwtInterceptor implements HandlerInterceptor {
 
         String userEmail = jwtProvider.extractEmail(token);
         Optional<User> findUser = userRepository.findByEmail(userEmail);
-        if (findUser.isEmpty()) {
-            log.debug("NO USER REDIRECT [{}][{}]", requestURI, userEmail);
-//            response.sendRedirect("/users/login?redirect=" + requestURI);
-            return false;
+
+        if (findUser.isEmpty()) { //토큰이 잘못되어있으면
+            log.debug("INVALIDATE TOKEN [{}][{}]", requestURI, userEmail);
+            throw new AuthenticationRequiredException("토큰이 유요하지 않습니다.");
         }
 
         return true;

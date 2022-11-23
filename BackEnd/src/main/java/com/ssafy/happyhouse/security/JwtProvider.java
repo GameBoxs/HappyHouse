@@ -1,11 +1,17 @@
 package com.ssafy.happyhouse.security;
 
+import com.ssafy.happyhouse.domain.dto.UserDTO;
+import com.ssafy.happyhouse.domain.dto.UserLoginDTO;
+import com.ssafy.happyhouse.domain.entity.User;
+import com.ssafy.happyhouse.repository.UserRepository;
+import com.ssafy.happyhouse.service.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -18,9 +24,12 @@ import java.util.Map;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class JwtProvider {
     @Value("${jwt.secret-key}")
     private String secretKey;
+
+    private final UserRepository userRepository;
 
 
     private String createToken(Map<String, Object> claims) {
@@ -54,9 +63,15 @@ public class JwtProvider {
         else return claims.get("userEmail", String.class);
     }
 
-    public String generateToken(String email) {
+    public String generateToken(UserLoginDTO userLoginDTO) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("userEmail", email);
+
+        User user = userRepository.findByEmail(userLoginDTO.getEmail()).orElse(null);
+
+        claims.put("userEmail", user.getEmail());
+        claims.put("userName", user.getName());
+        claims.put("role", user.getRole().name());
+
         return createToken(claims);
     }
 }

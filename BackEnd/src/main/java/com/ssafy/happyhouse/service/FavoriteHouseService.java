@@ -1,13 +1,19 @@
 package com.ssafy.happyhouse.service;
 
+import com.ssafy.happyhouse.advice.ErrorMessage;
+import com.ssafy.happyhouse.domain.dto.FavoriteRankDTO;
 import com.ssafy.happyhouse.domain.entity.FavoriteHouse;
 import com.ssafy.happyhouse.domain.entity.HouseInfo;
 import com.ssafy.happyhouse.domain.entity.User;
+import com.ssafy.happyhouse.exception.NoHouseException;
+import com.ssafy.happyhouse.exception.NoUserException;
 import com.ssafy.happyhouse.repository.FavoriteHouseRepository;
 import com.ssafy.happyhouse.repository.HouseInfoRepository;
 import com.ssafy.happyhouse.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,9 +27,9 @@ public class FavoriteHouseService {
 
     public void save(Long userId, Long aptCode) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("NO USER"));
+                .orElseThrow(() -> new NoUserException("NO USER"));
         HouseInfo house = houseInfoRepository.findByAptCode(aptCode)
-                .orElseThrow(() -> new IllegalArgumentException("NO HOUSE"));
+                .orElseThrow(() -> new NoHouseException("NO HOUSE"));
 
         FavoriteHouse saveInfo = FavoriteHouse.builder()
                 .user(user)
@@ -47,9 +53,7 @@ public class FavoriteHouseService {
                 .collect(Collectors.toList());
     }
 
-//    public List<FavoriteRankDTO> findRank() {
-//        return favoriteHouseRepository.findRank().stream()
-//                .limit(10)
-//                .collect(Collectors.toList());
-//    }
+    public List<FavoriteRankDTO> findRank() {
+        return favoriteHouseRepository.findRank(PageRequest.of(0, 10));
+    }
 }

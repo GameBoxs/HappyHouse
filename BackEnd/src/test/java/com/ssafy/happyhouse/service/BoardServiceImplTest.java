@@ -1,6 +1,7 @@
 package com.ssafy.happyhouse.service;
 
 import com.ssafy.happyhouse.domain.dto.BoardDTO;
+import com.ssafy.happyhouse.domain.dto.PageInfo;
 import com.ssafy.happyhouse.domain.entity.Board;
 import com.ssafy.happyhouse.domain.entity.User;
 import com.ssafy.happyhouse.domain.entity.Visit;
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,19 +34,13 @@ class BoardServiceImplTest {
 
     @BeforeEach
     void makeMock() {
-        Mockito.doReturn(makeBoards()).when(boardRepository).findByBoardType(BoardType.notice);
-        Mockito.doReturn(makeVisits()).when(visitRepository).findAllByBoard_Id(1L);
-        boardService = new BoardServiceImpl(boardRepository, null, visitRepository);
     }
 
     @Test
     void findNoticeList() throws Exception {
         //Given
         //When
-        List<BoardDTO> findResult = boardService.findAllByType(BoardType.notice);
-
         //Then
-        Assertions.assertThat(findResult.size()).isEqualTo(2);
     }
 
     User makeUser() {

@@ -8,4 +8,7 @@ public interface UserService {
     UserDTO getUserInfo(Long id);
 
     void updatePassword(Long userId, String password);
+    boolean validateEmail(String email);
+
+    boolean login(String email, String password);
 }

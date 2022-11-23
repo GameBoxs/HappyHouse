@@ -30,15 +30,19 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(new JwtInterceptor(jwtProvider, userRepository))
                 .order(2)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/users","/users/login", "/users/logout", "/boards", "/boards/**", "/error");
+                .excludePathPatterns("/users", "/users/login", "/users/logout",
+                        "/users/email", "/boards", "/boards/**",
+                        "/error", "/dongcode/**", "/housedeal/**","/houseinfo/**"
+                ,"/comments/boards/**", "/favorite/rank");
     }
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("*")
-                .allowedMethods("GET", "POST", "PUT", "PATCH", "OPTIONS")
-                .allowedHeaders("headers")
+                .allowedOrigins("http://localhost:8081")
+                .allowedMethods("GET","POST","DELETE","PATCH")
+                .allowedHeaders("*")
+                .allowCredentials(true)
                 .maxAge(3000);
     }
 
