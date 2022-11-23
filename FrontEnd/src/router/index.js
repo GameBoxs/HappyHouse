@@ -6,6 +6,8 @@ import FindApt from '@/views/FindApt.vue'
 import BoardView from '@/views/BoardView.vue'
 import NoticeList from '@/components/Function/board/Notice/NoticeList.vue'
 import NoticeDetail from '@/components/Function/board/Notice/NoticeDetail.vue'
+import NoticeEdit from '@/components/Function/board/Notice/NoticeEdit.vue'
+import NoticeWrite from '@/components/Function/board/Notice/NoticeWrite.vue'
 import QnaList from '@/components/Function/board/QnaList.vue'
 Vue.use(VueRouter)
 
@@ -50,6 +52,16 @@ const routes = [
         path: 'noticedetail',
         name: 'noticedetail',
         component: NoticeDetail,
+      },
+      {
+        path: 'noticeedit',
+        name: 'noticeedit',
+        component: NoticeEdit,
+      },
+      {
+        path: 'noticewrite',
+        name: 'noticewrite',
+        component: NoticeWrite,
       },
       {
         path: 'qnalist',

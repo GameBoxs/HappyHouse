@@ -9,7 +9,7 @@
         >
             <template #cell(title)="data">
                 <!-- <template @click="test(data.item.id)">{{data.value}} / {{data.item.id}}</template> -->
-                <router-link :to="{path:'noticedetail', query:{id:data.item.id} }"> {{data.value}} </router-link>
+                <router-link :to="{path:'noticedetail', query:{id:data.item.id} }" class="routerlink"> {{data.value}} </router-link>
             </template>
         </b-table>
         <!-- <div class="text-end" v-if="this.$store.getters.getMyRole == 'ADMIN' "> -->
@@ -25,8 +25,8 @@
                     </div>
                 </div>
             </div>
-            <div class="col-2 text-end">
-                <button class="btn btn-primary">글 작성</button>
+            <div class="col-2 text-end" v-if="$store.getters.getMyRole == 'ADMIN'">
+                <button class="btn btn-primary" @click="goCreate">글 작성</button>
             </div>
         </div>
         <div class="mt-3">
@@ -44,6 +44,7 @@
 
 <script>
 import http from '@/api/http'
+import cookie from '@/api/checkCookie'
 export default {
     name: 'NoticeList',
 
@@ -86,6 +87,7 @@ export default {
     },
 
     mounted() {
+        this.$emit('Mask-Name', '공지 사항');
         let url = 'boards?boardType=notice&page=0';
         http.get(url)
         .then((response) => {
@@ -139,6 +141,18 @@ export default {
         }
     },
     methods: {
+        goCreate() {
+            if(cookie.get_cookie == null){
+                alert('로그인 세션이 만료되었습니다. 다시 로그인해 주세요!');
+                this.$store.dispatch('setisLogin',false);
+                this.$store.dispatch('setMyRole', "");
+                this.$store.dispatch('setMyName', "");
+                this.$store.dispatch('setMyEmail', "");
+                return;
+            }else{
+                this.$router.push({name:'noticewrite'});
+            }
+        },
         searchStart(){
             let url = 'boards/search?title='+ this.searchText;
             http.get(url)
@@ -212,5 +226,10 @@ button, .input-group {
 
 #boardListTable >>> .noticeTitleItem:hover {
     cursor: pointer;
+}
+
+.routerlink {
+    text-decoration: none;
+    color: black;
 }
 </style>

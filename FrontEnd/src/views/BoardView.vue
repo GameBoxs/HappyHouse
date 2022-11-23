@@ -4,7 +4,8 @@
             <div class="mask">
                 <div class="d-flex justify-content-center align-items-center h-100 pt-5" style="flex-direction: column;">
                     <div>
-                        <h1 class="mb-5 text-warning" v-if="$route.params.text == '공지 사항'">{{$route.params.text}}</h1>
+                        <!-- <h1 class="mb-5 text-warning" v-if="$route.params.text == '공지 사항'">{{$route.params.text}}</h1> -->
+                        <h1 class="mb-5 text-warning">{{maskname}}</h1>
                         <h1 class="mb-5" v-if="$route.params.text == 'Q&A'">
                             <span class="text-danger">{{$route.params.text.substr(0,1)}} </span>
                             <span class="text-white">{{$route.params.text.substr(1,1)}} </span>
@@ -18,7 +19,7 @@
         <div class="boardBodyDiv container-fluid">
             <div class="boardBody rounded-3 mx-auto">
                 <div class="px-2 py-2" style="height:100%">
-                    <router-view :key="$route.fullPath"/>
+                    <router-view :key="$route.fullPath" @Mask-Name="setMaskName"/>
                 </div>
             </div>
         </div>
@@ -33,7 +34,7 @@ export default {
 
     data() {
         return {
-            
+            maskname:'',
         };
     },
 
@@ -42,7 +43,9 @@ export default {
     },
 
     methods: {
-
+        setMaskName(text) {
+            this.maskname = text;
+        }
     },
 };
 </script>

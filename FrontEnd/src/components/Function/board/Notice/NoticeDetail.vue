@@ -76,10 +76,15 @@
                             <tr>
                                 <td>
                                     <span style='float:right'>
-                                        <button type="button" id="list" class="btn btn-default">목록</button>
-                                        <button type="button" id="modify" class="btn btn-default">수정</button>
-                                        <button type="button" id="delete" class="btn btn-default">삭제</button>
-                                        <button type="button" id="write" class="btn btn-default">글쓰기</button>
+                                        <template v-if="$store.getters.getMyRole == 'ADMIN'">
+                                            <button type="button" id="list" class="btn btn-outline-secondary me-2" @click="goNoticeList">목록</button>
+                                            <button type="button" id="modify" class="btn btn-outline-secondary me-2" @click="goNoticeEdit(NoticeDetailItem.id)">수정</button>
+                                            <button type="button" id="delete" class="btn btn-outline-secondary me-2" @click="deleteNotice(NoticeDetailItem.id)">삭제</button>
+                                            <button type="button" id="write" class="btn btn-outline-secondary" @click="goCreate">글쓰기</button>
+                                        </template>
+                                        <template v-else>
+                                            <button type="button" id="list" class="btn btn-outline-secondary me-2" @click="goNoticeList">목록</button>
+                                        </template>
                                     </span>
                                 </td>
                             </tr>
@@ -87,13 +92,14 @@
                     </table>
                 </div>
             </div>
-            <hr/>
+            <!-- <hr/> -->
         </div>
     </div>
 </template>
 
 <script>
 import http from '@/api/http'
+import cookie from '@/api/checkCookie'
 export default {
     name: 'NoticeDetail',
 
@@ -115,6 +121,7 @@ export default {
     },
 
     mounted() {
+        this.$emit('Mask-Name', '공지 사항');
         this.getDetailItem();
         this.getCommentItem();
     },
@@ -125,6 +132,50 @@ export default {
     },
 
     methods: {
+        goCreate() {
+            if(cookie.get_cookie == null){
+                alert('로그인 세션이 만료되었습니다. 다시 로그인해 주세요!');
+                this.$store.dispatch('setisLogin',false);
+                this.$store.dispatch('setMyRole', "");
+                this.$store.dispatch('setMyName', "");
+                this.$store.dispatch('setMyEmail', "");
+                return;
+            }
+            this.$router.push({name:'noticewrite'});
+        },
+        deleteNotice(id) {
+            if(window.confirm('정말로 게시글을 삭제 하시겠습니까?')) {
+                let url = '/boards/'+id;
+                http.delete(url)
+                .then(() => {
+                    alert('삭제 성공!!');
+                    this.goNoticeList();
+                })
+                .catch((error) => {
+                    if(error.response.status==403){
+                        alert('로그인 세션이 만료되었습니다. 다시 로그인해 주세요!');
+                        this.$router.replace({name:'home'});
+                    } else{
+                        console.log(error);
+                        alert('삭제에 실패 했습니다!');
+                    }
+                })
+            }
+        },
+        goNoticeEdit(id) {
+            if(cookie.get_cookie == null){
+                alert('로그인 세션이 만료되었습니다. 다시 로그인해 주세요!');
+                this.$store.dispatch('setisLogin',false);
+                this.$store.dispatch('setMyRole', "");
+                this.$store.dispatch('setMyName', "");
+                this.$store.dispatch('setMyEmail', "");
+                return;
+            }
+            this.$router.replace({name:'noticeedit', query:{id:id}});
+        },
+        goNoticeList() {
+            this.$router.push({name:'noticelist', params:{text:'공지 사항'}});
+        },
         removeComment(id) {
             if(window.confirm('정말로 댓글을 삭제 하시겠습니까?')) {
                 let url = '/comments/'+id;
@@ -134,9 +185,14 @@ export default {
                     alert('삭제 성공!');
                 })
                 .catch((error) => {
-                    console.log(error);
-                    this.$router.replace({name:'noticelist'});
-                    alert('댓글 삭제 실패!!');
+                    if(error.response.status==403){
+                    alert('로그인 세션이 만료되었습니다. 다시 로그인해 주세요!');
+                    this.$router.replace({name:'home'});
+                } else{
+                        console.log(error);
+                        this.$router.replace({name:'noticelist'});
+                        alert('댓글 삭제 실패!!');
+                    }
                 })
             }
         },
@@ -147,9 +203,14 @@ export default {
                 window.location.reload(true);
             })
             .catch((error) => {
-                console.log(error);
-                this.$router.replace({name:'noticelist'});
-                alert('댓글 작성 실패!!');
+                if(error.response.status==403){
+                    alert('로그인 세션이 만료되었습니다. 다시 로그인해 주세요!');
+                    this.$router.replace({name:'home'});
+                } else{
+                    console.log(error);
+                    this.$router.replace({name:'noticelist'});
+                    alert('댓글 작성 실패!!');
+                }
             })
         },
         changeComment(e) {

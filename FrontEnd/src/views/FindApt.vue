@@ -2,7 +2,7 @@
     <div class="findaptmain">
         <div class="black-bg" v-if="isModalOpen" @mousedown="modalClose($event)" id='black-bg'>
             <div class="white-bg">
-                <AptModal :lat="requestItem.lat" :lng="requestItem.lng" :aptcode="requestItem.aptCode" :aptname="requestItem.aptname"/>
+                <AptModal :lat="requestItem.lat" :lng="requestItem.lng" :aptcode="requestItem.aptcode" :aptname="requestItem.name"/>
             </div>
         </div>
         <div class="bg-image">
@@ -207,7 +207,7 @@ export default {
             this.finalInfo.name="";
         },
         modalClose(e) {
-            console.log(e.target.id);
+            // console.log(e.target.id);
             if(e.target.id == 'black-bg'){
                 this.isModalOpen = false;
             }
@@ -303,10 +303,13 @@ body{
 }
 .white-bg {
     height: 90%;
-    width: 20%;
+    width: 25%;
     margin: 5% auto;
     background: white;
     border-radius: 5px;
     padding: 20px;
+}
+.isModalOpen {
+    overflow: hidden;
 }
 </style>

@@ -1,15 +1,28 @@
 <template>
     <div>
         <div class="roadview border" id="roadview"></div>
-        <div>
+        <div class="aptName text-start mt-2">
             {{aptname}}
         </div>
+        <b-tabs content-class="mt-3" fill style="" class="menuTab">
+            <b-tab title="최근거래" active class="menuItem">
+                <RecentTrade :aptcode="aptcode"/>
+            </b-tab>
+            <b-tab title="모든거래" class="menuItem"><p>I'm the second tab</p></b-tab>
+            <b-tab title="가격변동" class="menuItem"><p>I'm a disabled tab!</p></b-tab>
+            <b-tab title="순위" class="menuItem"><p>I'm a disabled tab!</p></b-tab>
+        </b-tabs>
     </div>
 </template>
 
 <script>
+import RecentTrade from '@/components/Function/Apt/Modal/RecentTrade.vue'
 export default {
     name: 'AptModal',
+
+    components: {
+        RecentTrade,
+    },
 
     data() {
         return {
@@ -20,7 +33,7 @@ export default {
     props: {
         lat:String,
         lng:String,
-        aptcode:String,
+        aptcode:Number,
         aptname:String,
     },
 
@@ -35,7 +48,6 @@ export default {
         } else{
             this.roadviewInit();
         }
-
     },
 
     methods: {
@@ -55,9 +67,41 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Black+Han+Sans&family=Dongle&family=Jua&family=Noto+Sans+KR&display=swap');
+@font-face {
+    font-family: 'GmarketSansMedium';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
 .roadview{
     width: 100%;
     height: 250px;
+}
+.aptName{
+    font-family: 'Noto Sans KR', sans-serif;
+        font-size: 30px;
+        transform: skew(-0.1deg);
+}
+
+.menuItem::-webkit-scrollbar,
+.menuItem::-webkit-scrollbar-thumb {
+    width: 26px;
+    border-radius: 13px;
+    background-clip: padding-box;
+    border: 10px solid transparent;
+    color: rgba(0, 0, 0, 0.3);
+}
+
+.menuItem::-webkit-scrollbar-thumb {        
+    box-shadow: inset 0 0 0 10px;
+}
+.menuTab {
+    font-family: 'GmarketSansMedium';
+}
+.menuItem {
+    overflow:auto;
+    height:400px;
 }
 </style>
