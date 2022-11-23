@@ -3,6 +3,7 @@ package com.ssafy.happyhouse.service;
 import com.ssafy.happyhouse.domain.dto.UserDTO;
 import com.ssafy.happyhouse.domain.entity.User;
 import com.ssafy.happyhouse.domain.enumurate.Role;
+import com.ssafy.happyhouse.exception.NoUserException;
 import com.ssafy.happyhouse.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,7 +30,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO getUserInfo(Long id) {
         Optional<User> find = userRepository.findById(id);
-        find.orElseThrow(() -> new IllegalArgumentException("NO USER"));
+        find.orElseThrow(() -> new NoUserException("NO USER"));
 
         return UserDTO.builder()
                 .name(find.get().getName())
@@ -43,5 +44,16 @@ public class UserServiceImpl implements UserService {
         updateUser.changePassword(password);
 
         userRepository.save(updateUser);
+    }
+
+    @Override
+    public boolean validateEmail(String email) {
+        //없으면 false
+        return userRepository.findByEmail(email).orElse(null) != null;
+    }
+
+    @Override
+    public boolean login(String email, String password) {
+        return userRepository.findByEmailAndPassword(email, password).orElse(null) != null;
     }
 }

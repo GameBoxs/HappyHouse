@@ -5,6 +5,7 @@ import com.ssafy.happyhouse.domain.entity.Visit;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,4 +16,7 @@ public interface VisitRepository extends JpaRepository<Visit, Long> {
     List<Visit> findAllByBoard_Id(Long boardId);
 
     Optional<Visit> findByBoard_IdAndUser_Id(Long boardId, Long userId);
+
+    @Transactional
+    void deleteAllByBoard_Id(Long boardId);
 }

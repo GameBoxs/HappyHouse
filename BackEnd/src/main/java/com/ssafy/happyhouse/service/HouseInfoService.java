@@ -2,6 +2,7 @@ package com.ssafy.happyhouse.service;
 
 import com.ssafy.happyhouse.domain.entity.DongCode;
 import com.ssafy.happyhouse.domain.entity.HouseInfo;
+import com.ssafy.happyhouse.exception.NoHouseException;
 import com.ssafy.happyhouse.repository.DongCodeRepository;
 import com.ssafy.happyhouse.repository.HouseInfoRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,6 @@ public class HouseInfoService {
 
     public HouseInfo findByAptCode(Long aptCode) {
         return houseInfoRepository.findByAptCode(aptCode)
-                .orElseThrow(() -> new IllegalArgumentException("없는 아파트입니다."));
+                .orElseThrow(() -> new NoHouseException("NO HOUSE"));
     }
 }

@@ -22,11 +22,8 @@ public class HouseDealController {
         return houseDealService.findDealByDongCode(dongCode);
     }
 
-    //TODO : aptCode로 해당 아파트의 거래 정보를 최신순으로
     @GetMapping("/aptcode/{aptCode}")
     public List<HouseDeal> getDealByApt(@PathVariable Long aptCode) {
         return houseDealService.findDealByAptCode(aptCode);
     }
-
-    //TODO : 아파트 거래 정보에 필터 적용, 동적 쿼리
 }

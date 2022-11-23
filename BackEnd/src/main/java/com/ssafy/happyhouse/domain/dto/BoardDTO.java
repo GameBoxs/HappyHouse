@@ -25,6 +25,9 @@ public class BoardDTO {
     private BoardType boardType;
 
     @NotBlank
+    private String username;
+
+    @NotBlank
     private LocalDateTime createTime;
 
     @NotBlank

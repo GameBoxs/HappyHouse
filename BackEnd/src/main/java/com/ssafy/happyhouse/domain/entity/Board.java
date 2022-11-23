@@ -24,6 +24,7 @@ public class Board extends TimeEntity {
     private String title;
 
     @NotEmpty
+    @Column(length = 1000)
     private String content;
 
     @Enumerated
@@ -31,4 +32,14 @@ public class Board extends TimeEntity {
 
     @ManyToOne
     private User user;
+
+    public Board update(String title, String content) {
+        if (title != null) {
+            this.title = title;
+        }
+        if (content != null) {
+            this.content = content;
+        }
+        return this;
+    }
 }

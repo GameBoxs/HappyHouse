@@ -4,7 +4,8 @@ import com.ssafy.happyhouse.annotation.Login;
 import com.ssafy.happyhouse.domain.dto.UserDTO;
 import com.ssafy.happyhouse.domain.dto.UserLoginDTO;
 import com.ssafy.happyhouse.domain.entity.User;
-import com.ssafy.happyhouse.interceptor.JwtConst;
+import com.ssafy.happyhouse.exception.NoUserException;
+import com.ssafy.happyhouse.security.JwtConst;
 import com.ssafy.happyhouse.security.JwtProvider;
 import com.ssafy.happyhouse.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -24,16 +25,21 @@ public class UserController {
     private final JwtProvider jwtProvider;
 
     @PostMapping
-    public Object saveUser(@Validated UserDTO userDTO) {
+    public Object saveUser(@Validated @RequestBody UserDTO userDTO) {
         userService.save(userDTO);
         return "ok";
     }
 
     @PostMapping("/login")
-    public Object login(@Validated UserLoginDTO userLoginDTO, HttpServletResponse response) {
-        String jwtToken = jwtProvider.generateToken(userLoginDTO.getEmail());
+    public Object login(@Validated @RequestBody UserLoginDTO userLoginDTO, HttpServletResponse response) {
+        if (!userService.login(userLoginDTO.getEmail(), userLoginDTO.getPassword())) {
+            throw new IllegalArgumentException("NO MATCH");
+        }
+
+        String jwtToken = jwtProvider.generateToken(userLoginDTO);
         Cookie cookie = new Cookie(JwtConst.JWT_HEADER, jwtToken);
         cookie.setPath("/");
+        cookie.setMaxAge(30 * 60);
         response.addCookie(cookie);
 
         log.info("JWT-TOKEN [{}]", jwtToken);
@@ -59,9 +65,14 @@ public class UserController {
     @PatchMapping
     public void changePassword(@Login User user, @RequestParam String password) {
         if (user == null) {
-            throw new IllegalArgumentException("NO USER");
+            throw new NoUserException("NO USER");
         }
 
         userService.updatePassword(user.getId(), password);
+    }
+
+    @GetMapping("/email")
+    public boolean validateEmail(@RequestParam String email) {
+        return userService.validateEmail(email);
     }
 }
