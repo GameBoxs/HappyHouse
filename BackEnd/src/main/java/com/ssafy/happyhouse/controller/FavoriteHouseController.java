@@ -1,12 +1,10 @@
 package com.ssafy.happyhouse.controller;
 
-import com.ssafy.happyhouse.advice.ErrorMessage;
 import com.ssafy.happyhouse.annotation.Login;
 import com.ssafy.happyhouse.domain.dto.FavoriteCountDTO;
 import com.ssafy.happyhouse.domain.dto.FavoriteRankDTO;
 import com.ssafy.happyhouse.domain.entity.HouseInfo;
 import com.ssafy.happyhouse.domain.entity.User;
-import com.ssafy.happyhouse.exception.NoHouseException;
 import com.ssafy.happyhouse.service.FavoriteHouseService;
 import com.ssafy.happyhouse.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +40,17 @@ public class FavoriteHouseController {
     @GetMapping("/users")
     public List<HouseInfo> findFavorite(@Login User user) {
         return favoriteHouseService.findFavoriteHouses(user.getId());
+    }
+
+    @GetMapping("/check/{aptCode}")
+    public Boolean isFavorite(@PathVariable Long aptCode, @Login User user) {
+        return favoriteHouseService.isFavorite(user.getId(), aptCode);
+    }
+
+    @DeleteMapping("/{aptCode}")
+    public String deleteFavorite(@PathVariable Long aptCode, @Login User user) {
+        favoriteHouseService.deleteById(aptCode, user);
+        return "ok";
     }
 
     @GetMapping("/rank")

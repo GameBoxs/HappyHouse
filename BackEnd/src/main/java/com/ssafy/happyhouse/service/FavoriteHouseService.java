@@ -56,4 +56,10 @@ public class FavoriteHouseService {
     public List<FavoriteRankDTO> findRank() {
         return favoriteHouseRepository.findRank(PageRequest.of(0, 10));
     }
+
+    public void deleteById(Long aptCode, User user) {
+        FavoriteHouse favoriteHouse = favoriteHouseRepository.findByUser_IdAndHouseInfo_AptCode(user.getId(), aptCode)
+                .orElseThrow(() -> new IllegalArgumentException("삭제할 북마크가 없습니다."));
+        favoriteHouseRepository.delete(favoriteHouse);
+    }
 }
