@@ -1,12 +1,12 @@
 <template>
-    <div class="userDiv">
-        <router-view/>
+    <div>
+        QnA
     </div>
 </template>
 
 <script>
 export default {
-    name: 'UserView',
+    name: 'QnaList',
 
     data() {
         return {
@@ -25,10 +25,5 @@ export default {
 </script>
 
 <style>
-    .userDiv{
-        /* position: relative; */
-        min-height: 100vh;
-        width: 100%;
-        background: white;
-    }
+
 </style>

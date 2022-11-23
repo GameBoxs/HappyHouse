@@ -1,14 +1,16 @@
 <template>
   <div id="app">
     <NavBar/>
-    <router-view/>
+    <router-view :key="$route.fullPath"/>
+    <!-- <div class="footDiv">
     <FooterView/>
+    </div> -->
   </div>
 </template>
 
 <script>
 import NavBar from '@/components/NavBar.vue'
-import FooterView from '@/components/FooterView.vue'
+// import FooterView from '@/components/FooterView.vue'
 export default {
   name: 'App',
   data() {
@@ -19,7 +21,7 @@ export default {
 
   components: {
     NavBar,
-    FooterView,
+    // FooterView,
   },
 
   mounted() {
@@ -30,6 +32,7 @@ export default {
     
   },
 };
+
 </script>
 
 <style>
@@ -42,7 +45,18 @@ body {
 body::-webkit-scrollbar {
     display: none;
 }
+#app{
+  overflow: auto;
+  /* min-height: 100%; */
+  /* height: 100%; */
+  /* padding-bottom: 80px; */
+  /* margin-bottom: 80px; */
+}
 /* 스크롤바 디자인 없애기 끝 */
+
+
+
+
 
 /* #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

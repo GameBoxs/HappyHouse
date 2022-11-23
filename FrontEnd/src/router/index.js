@@ -3,7 +3,12 @@ import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import UserView from '@/views/UserView.vue'
 import FindApt from '@/views/FindApt.vue'
-
+import BoardView from '@/views/BoardView.vue'
+import NoticeList from '@/components/Function/board/Notice/NoticeList.vue'
+import NoticeDetail from '@/components/Function/board/Notice/NoticeDetail.vue'
+import NoticeEdit from '@/components/Function/board/Notice/NoticeEdit.vue'
+import NoticeWrite from '@/components/Function/board/Notice/NoticeWrite.vue'
+import QnaList from '@/components/Function/board/QnaList.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -21,12 +26,49 @@ const routes = [
         name: 'login',
         component: () => import('@/components/User/LoginView.vue'),
       },
+      {
+        path: 'signup',
+        name: 'signup',
+        component: () => import('@/components/User/SignUpView.vue'),
+      },
     ],
   },
   {
     path: '/apt',
     name: 'apt',
     component: FindApt,
+  },
+  {
+    path: '/board',
+    name: 'board',
+    component: BoardView,
+    children: [
+      {
+        path: 'noticelist',
+        name: 'noticelist',
+        component: NoticeList
+      },
+      {
+        path: 'noticedetail',
+        name: 'noticedetail',
+        component: NoticeDetail,
+      },
+      {
+        path: 'noticeedit',
+        name: 'noticeedit',
+        component: NoticeEdit,
+      },
+      {
+        path: 'noticewrite',
+        name: 'noticewrite',
+        component: NoticeWrite,
+      },
+      {
+        path: 'qnalist',
+        name: 'qnalist',
+        component: QnaList
+      },
+    ],
   },
   // {
   //   path: '/about',

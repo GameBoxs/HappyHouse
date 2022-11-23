@@ -1,11 +1,11 @@
 <template>
-  <div class="home">
+    <div class="home">
     <div id="page-top">
         <!-- Carousel 영역 -->
         <div id="carouselExampleControls" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-pause="false">
             <div class="carousel-inner">
                 <div class="carousel-item active" data-bs-interval="6000">
-                    <img src="@/assets/img/carousel/carousel-1.jpg" class="d-block w-100" alt="..." style="height:940px; filter: brightness(0.40);">
+                    <img src="@/assets/img/carousel/carousel-1.jpg" class="d-block" alt="..." style="height:100vh; width:100%; filter: brightness(0.40);">
                     <div class="carousel-caption d-flex flex-column justify-content-center h-100" style="top: 0">
                         <h1 class="display-4 text-white mb-3 carouseText">아파트 매매 조회</h1>
                         <p class="fw-bold fs-4 text-white mb-5 mt-1 carouseText" style="--bs-text-opacity: .55;">원하시는 위치와 지도를 통해 편안히 아파트를
@@ -21,7 +21,7 @@
                     </div>
                 </div>
                 <div class="carousel-item" data-bs-interval="6000">
-                    <img src="@/assets/img/carousel/carousel-2.jpg" class="d-block w-100" alt="..." style="height:940px; filter: brightness(0.40);">
+                    <img src="@/assets/img/carousel/carousel-2.jpg" class="d-block" alt="..." style="height:100vh; width:100%; filter: brightness(0.40);">
                     <div class="carousel-caption d-flex flex-column justify-content-center h-100" style="top: 0">
                         <h1 class="display-4 text-white mb-3 carouseText">공지 사항</h1>
                         <p class="fw-bold fs-4 text-white mb-5 mt-1 carouseText" style="--bs-text-opacity: .55;">중요한 공지사항에 대해 보실 수 있습니다.</p>
@@ -36,7 +36,7 @@
                     </div>
                 </div>
                 <div class="carousel-item" data-bs-interval="6000">
-                    <img src="@/assets/img/carousel/carousel-3.jpg" class="d-block w-100" alt="..." style="height:940px; filter: brightness(0.40);">
+                    <img src="@/assets/img/carousel/carousel-3.jpg" class="d-block" alt="..." style="height:100vh; width:100%; filter: brightness(0.40);">
                     <div class="carousel-caption d-flex flex-column justify-content-center h-100" style="top: 0">
                         <h1 class="display-4 text-white mb-3 carouseText">Q&A</h1>
                         <p class="fw-bold fs-4 text-white mb-5 mt-1 carouseText" style="--bs-text-opacity: .55;">궁금한 점이있으신가요? 물어보세요!</p>
@@ -51,7 +51,7 @@
                     </div>
                 </div>
                 <div class="carousel-item" data-bs-interval="6000">
-                    <img src="@/assets/img/carousel/carousel-4.jpg" class="d-block w-100" alt="..." style="height:940px; filter: brightness(0.40);">
+                    <img src="@/assets/img/carousel/carousel-4.jpg" class="d-block" alt="..." style="height:100vh; width:100%; filter: brightness(0.40);">
                     <div class="carousel-caption d-flex flex-column justify-content-center h-100" style="top: 0">
                         <h1 class="display-4 text-white mb-3 carouseText">오늘의 뉴스</h1>
                         <p class="fw-bold fs-4 text-white mb-5 mt-1 carouseText" style="--bs-text-opacity: .55;">부동산에 대한 오늘의 뉴스를 보실 수 있습니다.</p>
@@ -580,5 +580,8 @@ export default {
 .carouseText {
   font-family: 'Noto Sans KR', sans-serif;
   transform: skew(-0.1deg);
+}
+.home {
+    height: 100%;
 }
 </style>
