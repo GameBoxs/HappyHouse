@@ -123,6 +123,7 @@ export default {
             http.post(url,{name:this.userName, email:this.userEmail, password:this.pwd})
             .then(({data}) => {
                 console.log(data);
+                alert('회원 가입 성공!');
                 this.$router.replace({ name: "login"});
             })
             .catch(() => {

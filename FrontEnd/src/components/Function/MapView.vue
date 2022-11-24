@@ -73,7 +73,7 @@
                     </div>
 
                     <!-- 북마크 리스트 만들어야 함 AptList 그대로 복사해서 응용 -->
-                    <div class="accordion pt-2 mb-2" id="mapOptionThree">
+                    <div class="accordion pt-2 mb-2" id="mapOptionFour">
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="aptListH2">
                                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#aptList" aria-expanded="true" aria-controls="collapseOne" style="background-color:white; color:black;">
@@ -82,7 +82,7 @@
                             </h2>
                             <div id="aptList" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                 <div class="accordion-body aptListBody" style="overflow:auto; height:242px">
-                                    <AptList :priceFilter="priceFilter" :finalDongCode="finalInfo.dongCode" @make-aptmarker="setAptList" @Move-Apt="moveApt"/>
+                                    <BookMarkList :keys="bookrerenderkey" @make-aptmarker="setBookList" @Move-Apt="moveApt" v-if="this.$store.getters.isLogin == true"/>
                                 </div>
                             </div>
                         </div>
@@ -99,10 +99,12 @@
 
 <script>
 import AptList from '@/components/Function/Apt/AptList.vue'
+import BookMarkList from '@/components/Function/Apt/BookMarkList.vue' 
 export default {
     name: 'MapView',
     components: {
         AptList,
+        BookMarkList,
     },
     props:{
         finalInfo: {
@@ -111,6 +113,7 @@ export default {
                 return {};
             },
         },
+        keys:Number,
     },
     data() {
         return {
@@ -118,7 +121,7 @@ export default {
             placeOverlay:null,
             ps:null,
             contentNode:document.createElement('div'),
-            markers:[[],[],[],[],[]],
+            markers:[[],[],[],[],[],[]],
             infows:[],
             locPosition:"",
             geocoder:null,
@@ -127,7 +130,10 @@ export default {
             cafe:"",
             bank:"",
             priceFilter:"101000",
-            aptList:null,
+            aptList:[],
+            tempAptList:[],
+            bookList:[],
+            bookrerenderkey:1,
         };
     },
     mounted() {
@@ -228,12 +234,12 @@ export default {
             }
         },
         removeCategoryMarker(){
-            for(let i=0; i<5; i++){
+            for(let i=0; i<6; i++){
                 for(var j = 0; j < this.markers[i].length; j++){
                     this.markers[i][j].setMap(null);
                 }
             }
-            this.markers = [[],[],[],[],[]];
+            this.markers = [[],[],[],[],[],[]];
         },
         turnOffCategoryMarker(index){
             for(var i = 0; i < this.markers[index].length; i++){
@@ -241,9 +247,14 @@ export default {
             }
         },
         searchPlaces() {
-            if (this.bigmart==false && this.mart==false && this.bank==false && this.cafe==false && this.aptList==null) {
+            if (this.bigmart==false && this.mart==false && this.bank==false && this.cafe==false && this.aptList==null && this.bookList==null) {
                 return;
             }
+
+            if(this.placeOverlay==null) {
+            console.log(this.placeOverlay);
+    return;
+}
             
             // 커스텀 오버레이를 숨깁니다 
             this.placeOverlay.setMap(null);
@@ -262,8 +273,11 @@ export default {
             if(this.cafe==true){
                 this.ps.categorySearch('CE7', this.placesSearchCB, {useMapBounds:true}); 
             }
-            if(this.aptList!=null){
+            if(this.aptList){
                 this.makeAptMarker(this.aptList);
+            }
+            if(this.bookList){
+                this.makeBookMarker(this.bookList);
             }
         },
         placesSearchCB(data, status) {
@@ -354,9 +368,43 @@ export default {
             this.placeOverlay.setMap(this.map);  
         },
         setAptList(aptnamelist) {
-            this.aptList = null;
-            this.aptList = aptnamelist;
-            this.searchPlaces();
+            this.aptList = [];
+            if(aptnamelist == null){
+                return;
+            }
+            console.log('MapView.vue 366 aptnamelist : ' + JSON.stringify(aptnamelist) + 'bookList : ' + this.bookList);
+            if(aptnamelist || aptnamelist.length>0){
+                console.log(typeof(this.bookList));
+                if(this.bookList.length>0){
+                    this.tempAptList = aptnamelist;
+                    let temp = aptnamelist.filter(item1 => this.bookList.some(item2 => item1.name != item2.name))
+                    this.aptList = temp;
+                    console.log('MapView.vue 371 aptList : ' + this.aptList);
+                } else{
+                    console.log('MapView.vue tempAptList : ');
+                    console.log(this.tempAptList);
+                    if(this.tempAptList.length>0){
+                        this.aptList = this.tempAptList;
+                        this.tempAptList = [];
+                    } else {
+                        this.aptList = aptnamelist;
+                    }
+                }
+                this.searchPlaces();
+            }
+        },
+        setBookList(booknamelist) {
+            this.bookList = [];
+            if(booknamelist == null){
+                this.bookList = [];
+                this.setAptList(this.aptList);
+                return;
+            }
+            if(booknamelist) {
+                this.bookList = booknamelist;
+            }
+            console.log('setBookList MapView 384 : '+this.aptList);
+            this.setAptList(this.aptList);
         },
         makeAptMarker(aptnamelist) {
             if(aptnamelist){
@@ -381,6 +429,29 @@ export default {
                 }
             }
         },
+        makeBookMarker(booknamelist) {
+            if(booknamelist){
+                for(let i in booknamelist){
+                    let locPosition = new kakao.maps.LatLng(booknamelist[i].lat, booknamelist[i].lng);
+                    
+                    let imageSrc = require('@/assets/img/marker/bookmark.png');
+                    let imageSize = new kakao.maps.Size(33,44);
+                    let markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+                    
+                    let marker = new kakao.maps.Marker({
+                        map: this.map,
+                        position: locPosition,
+                        image: markerImage
+                    });
+                    this.markers[5].push(marker);
+                    ((marker, aptitem) => {
+                        kakao.maps.event.addListener(marker, 'click', () => {
+                            this.aptmodal(aptitem);
+                        });
+                    })(marker, booknamelist[i]);
+                }
+            }
+        },
         aptmodal(aptitem){
             // console.log("aptitem 보내기 전 json: " + JSON.stringify(aptitem));
             this.$emit('request-modal', aptitem);
@@ -392,12 +463,16 @@ export default {
         }
     },
     watch:{
+        keys: function() {
+            this.bookrerenderkey = this.keys;
+        },
         finalInfo:{ 
             deep:true,
             handler(newData) {
                 // console.log("MapView.vue - finalInfo 바뀜")
                 this.removeCategoryMarker();
                 this.removeInfoWindo();
+                this.searchPlaces();
                 // this.makeAptMarker();
                 // 주소로 좌표를 검색, 이름이 있을때만(초기화 해서 이름이 없으면 진행 안함)
                 if(newData.name){
@@ -406,6 +481,7 @@ export default {
                         if (status === kakao.maps.services.Status.OK) {
                             var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
                             this.map.setCenter(coords);
+                            this.map.setLevel(5);
                         } 
                     });  
                 }

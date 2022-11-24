@@ -8,7 +8,11 @@ import NoticeList from '@/components/Function/board/Notice/NoticeList.vue'
 import NoticeDetail from '@/components/Function/board/Notice/NoticeDetail.vue'
 import NoticeEdit from '@/components/Function/board/Notice/NoticeEdit.vue'
 import NoticeWrite from '@/components/Function/board/Notice/NoticeWrite.vue'
-import QnaList from '@/components/Function/board/QnaList.vue'
+import QnaList from '@/components/Function/board/Qna/QnaList.vue'
+import QnaDetail from '@/components/Function/board/Qna/QnaDetail.vue'
+import QnaEdit from '@/components/Function/board/Qna/QnaEdit.vue'
+import QnaWrite from '@/components/Function/board/Qna/QnaWrite.vue'
+import store from '../store/index'
 Vue.use(VueRouter)
 
 const routes = [
@@ -31,7 +35,20 @@ const routes = [
         name: 'signup',
         component: () => import('@/components/User/SignUpView.vue'),
       },
+      {
+        path: 'findpassword',
+        name: 'findpassword',
+        component: () => import('@/components/User/FindPassword.vue'),
+      },
     ],
+  },
+  {
+    path: '/mypage',
+    name: 'mypage',
+    component: () => import('@/views/MyPage.vue'),
+    meta: {
+      auth: true
+    }
   },
   {
     path: '/apt',
@@ -57,16 +74,43 @@ const routes = [
         path: 'noticeedit',
         name: 'noticeedit',
         component: NoticeEdit,
+        meta: {
+          auth: true
+        }
       },
       {
         path: 'noticewrite',
         name: 'noticewrite',
         component: NoticeWrite,
+        meta: {
+          auth: true
+        }
       },
       {
         path: 'qnalist',
         name: 'qnalist',
         component: QnaList
+      },
+      {
+        path: 'qnadetail',
+        name: 'qnadetail',
+        component: QnaDetail,
+      },
+      {
+        path: 'qnaedit',
+        name: 'qnaedit',
+        component: QnaEdit,
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path: 'qnawrite',
+        name: 'qnawrite',
+        component: QnaWrite,
+        meta: {
+          auth: true
+        }
       },
     ],
   },
@@ -79,11 +123,39 @@ const routes = [
   //   component: () => import(/* webpackChunkName: "about" */ '../views/NavBar.vue')
   // }
 ]
-
+function get_cookie() {
+  var value = document.cookie.match('(^|;) ?' + 'JWT-Token' + '=([^;]*)(;|$)');
+  return value? value[2] : null;
+}
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
-  routes
+  routes,
+  scrollBehavior(){
+    return {  x: 0, y: 0 }
+  },
 })
-
+router.beforeEach((to, from, next) => {
+  if (to.meta.auth && get_cookie() == null) {
+    alert('로그인 세션이 만료되었습니다. 다시 로그인해 주세요!');
+    store.state.isLogin = false;
+    store.state.myRole = "";
+    store.state.myName = "";
+    store.state.myEmail = "";
+    // store.dispatch('setisLogin',false);
+    // store.dispatch('setMyRole', "");
+    // store.dispatch('setMyName', "");
+    // store.dispatch('setMyEmail', "");
+    next('/');
+    return;
+  } else if(get_cookie() == null){
+    store.state.isLogin = false;
+    store.state.myRole = "";
+    store.state.myName = "";
+    store.state.myEmail = "";
+    next();
+    return;
+  }
+  next();
+})
 export default router

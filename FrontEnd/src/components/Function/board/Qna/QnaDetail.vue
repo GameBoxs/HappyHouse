@@ -1,5 +1,5 @@
 <template>
-    <div class="container mt-2" style="" id="noticeDetailDiv">
+    <div class="container mt-2" style="" id="qnaDetailDiv">
         <!-- {{$route.query.id}} -->
         <div class="container mt-3">
             <!-- <hr/> -->
@@ -8,8 +8,8 @@
                     <table class="table table-condensed">
                         <thead>
                             <tr align="center">
-                                <th width="10%">No.{{NoticeDetailItem.id}}</th>
-                                <th width="60%">{{NoticeDetailItem.title}}</th>
+                                <th width="10%">No.{{QnaDetailItem.id}}</th>
+                                <th width="60%">{{QnaDetailItem.title}}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -17,22 +17,22 @@
                                 <th>작성일
                                 </th>
                                 <td>
-                                {{NoticeDetailItem.createTime}}
+                                {{QnaDetailItem.createTime}}
                                 </td>
                             </tr>
                             <tr>
                                 <th>글쓴이
                                 </th>
                                 <td>
-                                {{NoticeDetailItem.username}} <span style="float:right;"><span style='font-weight: bolder;'>조회 : </span>{{NoticeDetailItem.hit}}</span>
+                                {{QnaDetailItem.username}} <span style="float:right;"><span style='font-weight: bolder;'>조회 : </span>{{QnaDetailItem.hit}}</span>
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="2">
-                                    <p>{{NoticeDetailItem.content}}</p>
+                                    <p>{{QnaDetailItem.content}}</p>
                                 </td>
                             </tr>
-                            <!-- <tr>
+                            <tr>
                                 <td colspan="2">
                                     <p>
                                         <span class="commentTXT">댓글</span>
@@ -64,26 +64,26 @@
                                         </table>
                                     </p>
                                 </td>
-                            </tr> -->
+                            </tr>
                         </tbody>
                     </table>
-                    <!-- <div class="form-group">
+                    <div class="form-group">
                         <textarea class="form-control" id="commentTextArea" rows="3" style="resize: none;" maxlength="200" :value="commentText" @input="changeComment"></textarea>
                         <button class="btn btn-outline-secondary mt-2" style="float:right;" @click="submitComment">등록</button>
-                    </div> -->
+                    </div>
                     <table class="table table-condensed">
                         <thead>
                             <tr>
                                 <td>
                                     <span style='float:right'>
-                                        <template v-if="$store.getters.getMyRole == 'ADMIN'">
-                                            <button type="button" id="list" class="btn btn-outline-secondary me-2" @click="goNoticeList">목록</button>
-                                            <button type="button" id="modify" class="btn btn-outline-secondary me-2" @click="goNoticeEdit(NoticeDetailItem.id)">수정</button>
-                                            <button type="button" id="delete" class="btn btn-outline-secondary me-2" @click="deleteNotice(NoticeDetailItem.id)">삭제</button>
+                                        <template v-if="$store.getters.getMyRole == 'ADMIN' || $store.getters.getMyEmail == QnaDetailItem.useremail">
+                                            <button type="button" id="list" class="btn btn-outline-secondary me-2" @click="goQnaList">목록</button>
+                                            <button type="button" id="modify" class="btn btn-outline-secondary me-2" @click="goQnaEdit(QnaDetailItem.id)">수정</button>
+                                            <button type="button" id="delete" class="btn btn-outline-secondary me-2" @click="deleteQna(QnaDetailItem.id)">삭제</button>
                                             <button type="button" id="write" class="btn btn-outline-secondary" @click="goCreate">글쓰기</button>
                                         </template>
                                         <template v-else>
-                                            <button type="button" id="list" class="btn btn-outline-secondary me-2" @click="goNoticeList">목록</button>
+                                            <button type="button" id="list" class="btn btn-outline-secondary me-2" @click="goQnaList">목록</button>
                                         </template>
                                     </span>
                                 </td>
@@ -100,7 +100,7 @@
 <script>
 import http from '@/api/http'
 export default {
-    name: 'NoticeDetail',
+    name: 'QnaDetail',
 
     data() {
         return {
@@ -108,7 +108,7 @@ export default {
             currentPage: 1,
             totalElements:'0',
             commentItem:[],
-            NoticeDetailItem:[],
+            QnaDetailItem:[],
             commentText:'',
         };
     },
@@ -120,7 +120,7 @@ export default {
     },
 
     mounted() {
-        this.$emit('Mask-Name', '공지 사항');
+        this.$emit('Mask-Name', 'QnA');
         this.getDetailItem();
         this.getCommentItem();
     },
@@ -132,15 +132,15 @@ export default {
 
     methods: {
         goCreate() {
-            this.$router.push({name:'noticewrite'});
+            this.$router.push({name:'qnawrite'});
         },
-        deleteNotice(id) {
+        deleteQna(id) {
             if(window.confirm('정말로 게시글을 삭제 하시겠습니까?')) {
                 let url = '/boards/'+id;
                 http.delete(url)
                 .then(() => {
                     alert('삭제 성공!!');
-                    this.goNoticeList();
+                    this.goQnaList();
                 })
                 .catch((error) => {
                     if(error.response.status==403){
@@ -157,11 +157,11 @@ export default {
                 })
             }
         },
-        goNoticeEdit(id) {
-            this.$router.replace({name:'noticeedit', query:{id:id}});
+        goQnaEdit(id) {
+            this.$router.replace({name:'qnaedit', query:{id:id}});
         },
-        goNoticeList() {
-            this.$router.push({name:'noticelist', params:{text:'공지 사항'}});
+        goQnaList() {
+            this.$router.push({name:'qnalist', params:{text:'QnA'}});
         },
         removeComment(id) {
             if(window.confirm('정말로 댓글을 삭제 하시겠습니까?')) {
@@ -178,7 +178,7 @@ export default {
                     this.$router.replace({name:'home'});
                     } else{
                         console.log(error);
-                        this.$router.replace({name:'noticelist'});
+                        this.$router.replace({name:'qnalist'});
                         alert('댓글 삭제 실패!!');
                     }
                 })
@@ -196,7 +196,7 @@ export default {
                     this.$router.replace({name:'home'});
                 } else{
                     console.log(error);
-                    this.$router.replace({name:'noticelist'});
+                    this.$router.replace({name:'qnalist'});
                     alert('댓글 작성 실패!!');
                 }
             })
@@ -208,9 +208,9 @@ export default {
             let url = 'boards/'+this.$route.query.id;
             http.get(url)
             .then(({data}) =>{
-                this.NoticeDetailItem = data;
-                let convert = new Date(this.NoticeDetailItem.createTime);
-                this.NoticeDetailItem.createTime = convert.getFullYear() + '-' + convert.getMonth() + '-' + convert.getDate() + ' ' + convert.getHours() + ":" + convert.getMinutes() + ":" + convert.getSeconds();
+                this.QnaDetailItem = data;
+                let convert = new Date(this.QnaDetailItem.createTime);
+                this.QnaDetailItem.createTime = convert.getFullYear() + '-' + convert.getMonth() + '-' + convert.getDate() + ' ' + convert.getHours() + ":" + convert.getMinutes() + ":" + convert.getSeconds();
             })
             .catch((error) => {
                 console.log(error);

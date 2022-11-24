@@ -1,6 +1,6 @@
 <template>
-    <div class="container mt-2" style="" id="noticeListDiv">
-        <button class="btn btn-primary mb-3 mt-5" @click="redirectNoticeList">글 목록</button>
+    <div class="container mt-2" style="" id="qnaListDiv">
+        <button class="btn btn-primary mb-3 mt-5" @click="redirectQnaList">글 목록</button>
         <b-table id="boardListTable" striped hover 
             :items="items"
             :per-page="perPage"
@@ -9,7 +9,7 @@
         >
             <template #cell(title)="data">
                 <!-- <template @click="test(data.item.id)">{{data.value}} / {{data.item.id}}</template> -->
-                <router-link :to="{path:'noticedetail', query:{id:data.item.id} }" class="routerlink"> {{data.value}} </router-link>
+                <router-link :to="{path:'qnadetail', query:{id:data.item.id} }" class="routerlink"> {{data.value}} </router-link>
             </template>
         </b-table>
         <!-- <div class="text-end" v-if="this.$store.getters.getMyRole == 'ADMIN' "> -->
@@ -25,7 +25,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-2 text-end" v-if="$store.getters.getMyRole == 'ADMIN'">
+            <div class="col-2 text-end" v-if="$store.getters.getMyRole == 'NORMAL'">
                 <button class="btn btn-primary" @click="goCreate">글 작성</button>
             </div>
         </div>
@@ -45,7 +45,7 @@
 <script>
 import http from '@/api/http'
 export default {
-    name: 'NoticeList',
+    name: 'QnaList',
 
     data() {
         return {
@@ -86,8 +86,8 @@ export default {
     },
 
     mounted() {
-        this.$emit('Mask-Name', '공지 사항');
-        let url = 'boards?boardType=notice&page=0';
+        this.$emit('Mask-Name', 'Q n A');
+        let url = 'boards?boardType=qna&page=0';
         http.get(url)
         .then((response) => {
             return response;
@@ -116,7 +116,7 @@ export default {
         currentPage() {
             let url = '';
             if(this.isSearch == false){
-                url = 'boards?boardType=notice&page='+(parseInt(this.currentPage)-1);
+                url = 'boards?boardType=qna&page='+(parseInt(this.currentPage)-1);
             } else{
                 url = 'boards/search?title='+ this.searchText + '&page=' +(parseInt(this.currentPage)-1);
             }
@@ -141,7 +141,7 @@ export default {
     },
     methods: {
         goCreate() {
-            this.$router.push({name:'noticewrite'});
+            this.$router.push({name:'qnawrite'});
         },
         searchStart(){
             let url = 'boards/search?title='+ this.searchText;
@@ -170,12 +170,10 @@ export default {
         searchTextChange(e) {
             this.searchText = e.target.value;
         },
-        redirectNoticeList() {
+        redirectQnaList() {
             // this.$router.push({name:'noticelist'});
-            window.location.reload(true);
-        },
-        test(data) {
-            console.log(data);
+            // window.location.reload(true);
+            this.$router.go();
         }
     },
 };

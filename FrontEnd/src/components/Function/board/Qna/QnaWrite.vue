@@ -1,11 +1,10 @@
 <template>
-    <div class="container mt-2" style="" id="noticeEditDiv">
+    <div class="container mt-2" style="" id="qnaWriteDiv">
         <div class="container mt-3">
             <div class="row justify-content-md-center">
                 <div class="col-md-10">
                     <table class="table table-condensed">
                         <thead>
-                            <tr><th colspan="2" class="text-center">공지 사항 작성</th></tr>
                             <tr align="center">
                                 <th width="10%" class="align-middle">제목</th>
                                 <th width="60%"><textarea class="form-control" rows="1" @input="changeTitleText" maxlength="50" :value="titleText" required style="width:100%; resize: none;" placeholder="제목 입력..."></textarea></th>
@@ -33,7 +32,7 @@
 <script>
 import http from '@/api/http'
 export default {
-    name: 'NoticeWrite',
+    name: 'QnaWrite',
 
     data() {
         return {
@@ -62,18 +61,18 @@ export default {
             this.contentText = e.target.value;
         },
         returnList() {
-            this.$router.replace({name:'noticelist', params:{text:'공지 사항'}});
+            this.$router.replace({name:'qnalist', params:{text:'QnA'}});
         },
         submitCreate() {
             let url = '/boards';
-            http.post(url,{"title" : this.titleText, "content" : this.contentText,"boardType" : "notice"})
+            http.post(url,{"title" : this.titleText, "content" : this.contentText,"boardType" : "qna"})
             .then(() =>{
                 alert('등록 성공!');
                 this.returnList();
             })
             .catch((error) => {
                 console.log(error);
-                this.$router.replace({name:'noticelist', params:{text:'공지 사항'}});
+                this.$router.replace({name:'qnalist', params:{text:'QnA'}});
                 alert('등록 실패!!');
             })
         },
