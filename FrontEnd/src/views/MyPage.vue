@@ -40,7 +40,7 @@
                                             비밀번호 <span v-b-tooltip.hover title="변경할 비밀번호 입력"><i class="fa-regular fa-circle-question"></i></span>
                                         </div>
                                         <div>
-                                            <input class="form-control" type="password" >
+                                            <input class="form-control" type="password" :value="password" @input="changepassword">
                                         </div>
                                     </div>
                                     <div class="col">
@@ -48,7 +48,7 @@
                                             비밀번호 확인 <span v-b-tooltip.hover title="변경할 비밀번호 확인"><i class="fa-regular fa-circle-question"></i></span>
                                         </div>
                                         <div>
-                                            <input class="form-control" type="password" >
+                                            <input class="form-control" type="password" :value="passwordcheck" @input="changepasswordcheck">
                                         </div>
                                     </div>
                                 </div>
@@ -191,6 +191,12 @@ export default {
     },
 
     methods: {
+        changepassword(e) {
+            this.password = e.target.value;
+        },
+        changepasswordcheck(e) {
+            this.passwordcheck = e.target.value;
+        },
         checkPattern() {
             let pwdcheck = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*]{4,20}$/;
             if(this.password < 4){
