@@ -32,7 +32,7 @@
                                     <p>{{NoticeDetailItem.content}}</p>
                                 </td>
                             </tr>
-                            <tr>
+                            <!-- <tr>
                                 <td colspan="2">
                                     <p>
                                         <span class="commentTXT">댓글</span>
@@ -64,13 +64,13 @@
                                         </table>
                                     </p>
                                 </td>
-                            </tr>
+                            </tr> -->
                         </tbody>
                     </table>
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <textarea class="form-control" id="commentTextArea" rows="3" style="resize: none;" maxlength="200" :value="commentText" @input="changeComment"></textarea>
                         <button class="btn btn-outline-secondary mt-2" style="float:right;" @click="submitComment">등록</button>
-                    </div>
+                    </div> -->
                     <table class="table table-condensed">
                         <thead>
                             <tr>

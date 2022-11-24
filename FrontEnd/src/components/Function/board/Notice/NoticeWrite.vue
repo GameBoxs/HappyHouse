@@ -5,6 +5,7 @@
                 <div class="col-md-10">
                     <table class="table table-condensed">
                         <thead>
+                            <tr><th colspan="2" class="text-center">공지 사항 작성</th></tr>
                             <tr align="center">
                                 <th width="10%" class="align-middle">제목</th>
                                 <th width="60%"><textarea class="form-control" rows="1" @input="changeTitleText" maxlength="50" :value="titleText" required style="width:100%; resize: none;" placeholder="제목 입력..."></textarea></th>

@@ -18,26 +18,26 @@
             <li class="nav-item"><router-link class="nav-link" :to="{name:'qnalist', params:{text:'Q&A'} }"><span class="navspan">Q&A</span></router-link></li>
             <li class="nav-item"><router-link class="nav-link" :to="{name:'apt'}"><span class="navspan">아파트 매매 찾기</span></router-link></li>
             
-            <template v-if="this.$store.getters.isLogin==false">
-            <li class="nav-item">
+            <template >
+            <li class="nav-item" v-show="this.$store.getters.isLogin==false">
               <router-link :to="{name:'signup'}" class="btn btn-default btn-sm text-white">
                 <i class="fa fs-5 fa-user pr-2 fa-beat-fade" style="--fa-animation-duration: 2s;"></i> <span class="navspan">SignUp</span>
               </router-link>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" v-show="this.$store.getters.isLogin==false">
               <router-link :to="{name:'login'}" class="btn btn-default btn-sm text-white">
                 <i class="fa fs-5 fa-lock pr-2 fa-shake" style="--fa-animation-duration: 2s;"></i> <span class="navspan">Login</span>
               </router-link>
             </li>
             </template>
 
-            <template v-else>
-              <li class="nav-item">
+            <template>
+              <li class="nav-item" v-show="this.$store.getters.isLogin==true">
                 <router-link :to="{name:'mypage'}" class="btn btn-default btn-sm text-white">
                   <i class="fa-regular fs-5 fa-pen-to-square"></i> <span class="navspan"> MyPage</span>
                 </router-link>
               </li>
-              <li class="nav-item">
+              <li class="nav-item" v-show="this.$store.getters.isLogin==true">
                 <div @click="logout" class="btn btn-default btn-sm text-white">
                   <i class="fa-solid fs-5 fa-right-from-bracket"></i> <span class="navspan">Logout</span>
                 </div>

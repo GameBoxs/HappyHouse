@@ -8,22 +8,15 @@
                     <img src="https://cdn.pixabay.com/photo/2015/12/28/02/58/home-1110868_960_720.png" alt="">
                 </div>
                 <div class="text-center mt-4 name">
-                    LogIn
+                    Find Password
                 </div>
                 <form class="p-3 mt-3" v-on:submit.prevent>
                     <div class="form-field d-flex align-items-center">
                         <span class="far fa-envelope"></span>
                         <input type="email" name="userEmail" id="userEmail" placeholder="E-mail" :value="userEmail" @input="changeEmail" autocomplete="off" @keydown.enter.prevent>
                     </div>
-                    <div class="form-field d-flex align-items-center">
-                        <span class="fas fa-key"></span>
-                        <input type="password" name="password" id="pwd" placeholder="Password" :value="password" @input="changePassword" autocomplete="off">
-                    </div>
-                    <button class="btn mt-3" @click="login">로그인</button>
+                    <button class="btn mt-5" @click="findPWD">비밀번호 찾기</button>
                 </form>
-                <div class="text-center fs-6 router">
-                    <router-link :to="{name:'findpassword'}" class="router">PW 찾기</router-link> or <router-link :to="{name:'signup'}" class="router">가입</router-link>
-                </div>
             </div>
         </div>
     </div>
@@ -34,7 +27,7 @@ var global = global || window;
 global.Buffer = global.Buffer || require("buffer").Buffer;
 import http from '@/api/http'
 export default {
-    name: 'LoginView',
+    name: 'FindPassword',
 
     data() {
         return {
@@ -47,37 +40,21 @@ export default {
     },
 
     methods: {
+        findPWD() {
+            let url = '/password?email='+this.userEmail;
+            http.get(url)
+            .then(() => {
+                alert('입력한 E-Mail로 임시 비밀번호를 전송하였습니다.\n 임시 비밀번호로 로그인하여 변경해 주세요.')
+                this.$router.replace({name:'home'});
+            })
+            .catch((error) => {
+                if(error.response.status == 400){
+                    alert('입력하신 E-Mail은 없는 E-Mail입니다.');
+                }
+            })
+        },
         changeEmail(e) {
             this.userEmail = e.target.value;
-        },
-        changePassword(e) {
-            this.password = e.target.value;
-        },
-        login() {
-            let url = 'users/login';
-            http.post(url,{email:this.userEmail, password:this.password})
-            .then(() => {
-                let token = this.get_cookie("JWT-Token");
-
-                let sliceValue = token.split('.')[1];
-
-                // let payload = Buffer.from(sliceValue.toString(),'base64').toString('utf8');
-                let payload = Buffer.from(sliceValue.toString(),'base64').toString('utf8');
-
-                let data = JSON.parse(payload.toString());
-                return data;
-            })
-            .then((data)=> {
-                this.$store.dispatch('setMyRole', data.role);
-                this.$store.dispatch('setMyName', data.userName);
-                this.$store.dispatch('setMyEmail', data.userEmail);
-                this.$store.dispatch('setisLogin',true);
-                this.$router.push({name:'home'});
-            })
-            .catch((e) => {
-                console.log(e);
-                alert('이메일 또는 패스워드가 틀립니다.');
-            })
         },
         get_cookie(name) {
             var value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');

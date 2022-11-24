@@ -36,11 +36,19 @@ const routes = [
         component: () => import('@/components/User/SignUpView.vue'),
       },
       {
-        path: 'mypage',
-        name: 'mypage',
-        component: () => import('@/components/User/MyPage.vue'),
+        path: 'findpassword',
+        name: 'findpassword',
+        component: () => import('@/components/User/FindPassword.vue'),
       },
     ],
+  },
+  {
+    path: '/mypage',
+    name: 'mypage',
+    component: () => import('@/views/MyPage.vue'),
+    meta: {
+      auth: true
+    }
   },
   {
     path: '/apt',
@@ -122,7 +130,10 @@ function get_cookie() {
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
-  routes
+  routes,
+  scrollBehavior(){
+    return {  x: 0, y: 0 }
+  },
 })
 router.beforeEach((to, from, next) => {
   if (to.meta.auth && get_cookie() == null) {
