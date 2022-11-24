@@ -26,12 +26,12 @@
                         <h1 class="display-4 text-white mb-3 carouseText">공지 사항</h1>
                         <p class="fw-bold fs-4 text-white mb-5 mt-1 carouseText" style="--bs-text-opacity: .55;">중요한 공지사항에 대해 보실 수 있습니다.</p>
                         <div>
-                            <a class="btn-lg btn-info py-2 px-3 carouseText" href="findAPT.jsp" style="text-decoration: none;">
+                            <router-link class="btn-lg btn-info py-2 px-3 carouseText" :to="{name:'noticelist', params:{text:'공지 사항'} }" style="text-decoration: none;">
                                 <span class="carouseText">이동 하기</span>
                                 <div class="d-inline-flex btn-lg-square bg-white text-primary rounded-circle ms-2" style="position: relative; top:3px;">
                                     <i class="fa fa-arrow-right"></i>
                                 </div>
-                            </a>
+                            </router-link>
                         </div>
                     </div>
                 </div>
@@ -41,16 +41,16 @@
                         <h1 class="display-4 text-white mb-3 carouseText">Q&A</h1>
                         <p class="fw-bold fs-4 text-white mb-5 mt-1 carouseText" style="--bs-text-opacity: .55;">궁금한 점이있으신가요? 물어보세요!</p>
                         <div>
-                            <a class="btn-lg btn-info py-2 px-3 carouseText" href="findAPT.jsp" style="text-decoration: none;">
+                            <router-link class="btn-lg btn-info py-2 px-3 carouseText" :to="{name:'qnalist', params:{text:'Q&A'} }" style="text-decoration: none;">
                                 <span class="carouseText">이동 하기</span>
                                 <div class="d-inline-flex btn-lg-square bg-white text-primary rounded-circle ms-2" style="position: relative; top:3px;">
                                     <i class="fa fa-arrow-right"></i>
                                 </div>
-                            </a>
+                            </router-link>
                         </div>
                     </div>
                 </div>
-                <div class="carousel-item" data-bs-interval="6000">
+                <!-- <div class="carousel-item" data-bs-interval="6000">
                     <img src="@/assets/img/carousel/carousel-4.jpg" class="d-block" alt="..." style="height:100vh; width:100%; filter: brightness(0.40);">
                     <div class="carousel-caption d-flex flex-column justify-content-center h-100" style="top: 0">
                         <h1 class="display-4 text-white mb-3 carouseText">오늘의 뉴스</h1>
@@ -64,7 +64,7 @@
                             </a>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -75,6 +75,115 @@
                 <span class="visually-hidden">Next</span>
             </button>
         </div>
+
+        <section class="page-section bg-light" id="portfolio">
+            <div class="container">
+                <div class="text-center">
+                    <h2 class="section-heading text-uppercase">오늘의 뉴스</h2>
+                    <h3 class="section-subheading text-muted">부동산에 관련된 뉴스 모음 입니다</h3>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4 col-sm-6 mb-4" v-for="(item,index) in items" :key="index">
+                        <div class="portfolio-item">
+                            <a class="portfolio-link" :href="item.originallink" target="_blank">
+                                <div class="portfolio-hover">
+                                    <div class="portfolio-hover-content"><i class="fa-solid fa-up-right-from-square fa-3x"></i></div>
+                                </div>
+                                <img class="img-fluid" :src="require(`@/assets/img/portfolio/${index+1}.jpg`)" alt="..." />
+                            </a>
+                            <div class="portfolio-caption">
+                                <div class="portfolio-caption-heading" v-html="item.title"></div>
+                                <!-- <div class="portfolio-caption-subheading text-muted">뉴스 내용</div> -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="col-lg-4 col-sm-6 mb-4">
+                        <div class="portfolio-item">
+                            <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal1">
+                                <div class="portfolio-hover">
+                                    <div class="portfolio-hover-content"><i class="fa-solid fa-up-right-from-square fa-3x"></i></div>
+                                </div>
+                                <img class="img-fluid" src="@/assets/img/portfolio/1.jpg" alt="..." />
+                            </a>
+                            <div class="portfolio-caption">
+                                <div class="portfolio-caption-heading">뉴스 제목</div>
+                                <div class="portfolio-caption-subheading text-muted">뉴스 내용</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6 mb-4">
+                        <div class="portfolio-item">
+                            <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal2">
+                                <div class="portfolio-hover">
+                                    <div class="portfolio-hover-content"><i class="fa-solid fa-up-right-from-square fa-3x"></i></div>
+                                </div>
+                                <img class="img-fluid" src="@/assets/img/portfolio/2.jpg" alt="..." />
+                            </a>
+                            <div class="portfolio-caption">
+                                <div class="portfolio-caption-heading">뉴스 제목</div>
+                                <div class="portfolio-caption-subheading text-muted">뉴스 내용</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6 mb-4">
+                        <div class="portfolio-item">
+                            <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal3">
+                                <div class="portfolio-hover">
+                                    <div class="portfolio-hover-content"><i class="fa-solid fa-up-right-from-square fa-3x"></i></div>
+                                </div>
+                                <img class="img-fluid" src="@/assets/img/portfolio/3.jpg" alt="..." />
+                            </a>
+                            <div class="portfolio-caption">
+                                <div class="portfolio-caption-heading">뉴스 제목</div>
+                                <div class="portfolio-caption-subheading text-muted">뉴스 내용</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6 mb-4 mb-lg-0">
+                        <div class="portfolio-item">
+                            <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal4">
+                                <div class="portfolio-hover">
+                                    <div class="portfolio-hover-content"><i class="fa-solid fa-up-right-from-square fa-3x"></i></div>
+                                </div>
+                                <img class="img-fluid" src="@/assets/img/portfolio/4.jpg" alt="..." />
+                            </a>
+                            <div class="portfolio-caption">
+                                <div class="portfolio-caption-heading">뉴스 제목</div>
+                                <div class="portfolio-caption-subheading text-muted">뉴스 내용</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6 mb-4 mb-sm-0">
+                        <div class="portfolio-item">
+                            <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal5">
+                                <div class="portfolio-hover">
+                                    <div class="portfolio-hover-content"><i class="fa-solid fa-up-right-from-square fa-3x"></i></div>
+                                </div>
+                                <img class="img-fluid" src="@/assets/img/portfolio/5.jpg" alt="..." />
+                            </a>
+                            <div class="portfolio-caption">
+                                <div class="portfolio-caption-heading">뉴스 제목</div>
+                                <div class="portfolio-caption-subheading text-muted">뉴스 내용</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6">
+                        <div class="portfolio-item">
+                            <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal6">
+                                <div class="portfolio-hover">
+                                    <div class="portfolio-hover-content"><i class="fa-solid fa-up-right-from-square fa-3x"></i></div>
+                                </div>
+                                <img class="img-fluid" src="@/assets/img/portfolio/6.jpg" alt="..." />
+                            </a>
+                            <div class="portfolio-caption">
+                                <div class="portfolio-caption-heading">뉴스 제목</div>
+                                <div class="portfolio-caption-subheading text-muted">뉴스 내용</div>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+        </section>
         
         <!-- Services-->
         <!-- <section class="page-section" id="services">
@@ -560,16 +669,26 @@
 </template>
 
 <script>
+import http from '@/api/http'
 export default {
-  name: 'HomeView',
-  components: {
-  },
-  data() {
+    name: 'HomeView',
+        components: {
+    },
+    data() {
         return {
+            items:[],
         }
     },
     methods: {
-    }
+    },
+    mounted() {
+        let url = '/news/search';
+        http.get(url)
+        .then(({data}) => {
+            this.items = data.items;
+            console.log(this.items);
+        })
+    },
 }
 
 

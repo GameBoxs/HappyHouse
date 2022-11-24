@@ -32,20 +32,38 @@ export default {
     },
 
     methods: {
+        get_cookie() {
+            var value = document.cookie.match('(^|;) ?' + 'JWT-Token' + '=([^;]*)(;|$)');
+            return value? value[2] : null;
+        },
         readBookMarkList() {
-            let url = '/favorite/users';
-            http.get(url)
-            .then((response) => {
-                return response;
-            })
-            .then(({data}) => {
-                console.log('북마크 데이터 : '+ data);
-                this.bookmarklist = data;
-                this.addlist();
-            })
-            .catch((error) => {
-                console.log(error + " (Error)");
-            })
+            if(this.get_cookie() != null){
+                let url = '/favorite/users';
+                http.get(url)
+                .then((response) => {
+                    console.log(response);
+                    return response;
+                })
+                .then(({data}) => {
+                    console.log('북마크 데이터 : '+ data);
+                    this.bookmarklist = data;
+                    this.addlist();
+                })
+                .catch((error) => {
+                    if(error.response.status == 403) {
+                        this.$store.dispatch('setisLogin',false);
+                        this.$store.dispatch('setMyRole', "");
+                        this.$store.dispatch('setMyName', "");
+                        this.$store.dispatch('setMyEmail', "");
+                    }
+                    console.log(error);
+                })
+            } else{
+                this.$store.dispatch('setisLogin',false);
+                this.$store.dispatch('setMyRole', "");
+                this.$store.dispatch('setMyName', "");
+                this.$store.dispatch('setMyEmail', "");
+            }
         },
         addlist(){
             if(this.bookmarklist){
@@ -56,7 +74,9 @@ export default {
             }
         },
         makebookmarklist() {
-            if(this.bookmarknamelist){
+            console.log("BookMarkList.vue bookmarknamelist");
+            console.log(this.bookmarknamelist);
+            if(this.bookmarknamelist.length>0){
                 this.$emit('make-aptmarker', this.bookmarknamelist);
             } else{
                 this.$emit('make-aptmarker', null);

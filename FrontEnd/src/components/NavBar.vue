@@ -33,6 +33,11 @@
 
             <template v-else>
               <li class="nav-item">
+                <router-link :to="{name:'mypage'}" class="btn btn-default btn-sm text-white">
+                  <i class="fa-regular fs-5 fa-pen-to-square"></i> <span class="navspan"> MyPage</span>
+                </router-link>
+              </li>
+              <li class="nav-item">
                 <div @click="logout" class="btn btn-default btn-sm text-white">
                   <i class="fa-solid fs-5 fa-right-from-bracket"></i> <span class="navspan">Logout</span>
                 </div>

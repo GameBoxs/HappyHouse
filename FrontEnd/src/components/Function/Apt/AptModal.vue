@@ -4,19 +4,19 @@
         <div class="aptName text-start mt-2">
             {{aptname}} 
 
-                <span  @click="clickBookMark" v-show="isBookMarked==false"><i class="fa-regular fa-bookmark" style="float:right; cursor:pointer" ></i></span>
+                <span  @click="clickBookMark" v-show="isBookMarked==false && isLogin"><i class="fa-regular fa-bookmark" style="float:right; cursor:pointer" ></i></span>
 
 
-                <span @click="clickBookMark" v-show="isBookMarked==true"><i class="fa-solid fa-bookmark" style="float:right; cursor:pointer" ></i></span>
+                <span @click="clickBookMark" v-show="isBookMarked==true && isLogin"><i class="fa-solid fa-bookmark" style="float:right; cursor:pointer" ></i></span>
 
         </div>
         <b-tabs content-class="mt-3" fill style="" class="menuTab">
-            <b-tab title="최근거래" active class="menuItem">
+            <b-tab title="최근거래" active class="menuItem" lazy>
                 <RecentTrade :aptcode="aptcode"/>
             </b-tab>
-            <b-tab title="모든거래" class="menuItem"><TradeList :aptcode="aptcode"/></b-tab>
-            <b-tab title="가격변동" class="menuItem"><PriceChart :aptcode="aptcode"/></b-tab>
-            <b-tab title="북마크수" class="menuItem"><p>I'm a disabled tab!</p></b-tab>
+            <b-tab title="모든거래" class="menuItem" lazy><TradeList :aptcode="aptcode"/></b-tab>
+            <b-tab title="가격변동" class="menuItem" lazy><PriceChart :aptcode="aptcode"/></b-tab>
+            <b-tab title="북마크수" class="menuItem" lazy><BookMarkCount :aptcode="aptcode"/></b-tab>
         </b-tabs>
     </div>
 </template>
@@ -25,6 +25,7 @@
 import RecentTrade from '@/components/Function/Apt/Modal/RecentTrade.vue'
 import PriceChart from '@/components/Function/Apt/Modal/PriceChart.vue'
 import TradeList from '@/components/Function/Apt/Modal/TradeList.vue'
+import BookMarkCount from '@/components/Function/Apt/Modal/BookMarkCount.vue'
 import http from '@/api/http'
 export default {
     name: 'AptModal',
@@ -33,11 +34,13 @@ export default {
         RecentTrade,
         PriceChart,
         TradeList,
+        BookMarkCount,
     },
 
     data() {
         return {
             isBookMarked:false,
+            isLogin:false,
         };
     },
 
@@ -49,6 +52,28 @@ export default {
     },
 
     mounted() {
+        if(this.get_cookie == null){
+            this.$store.dispatch('setisLogin',false)
+            this.$store.dispatch('setMyRole','')
+            this.$store.dispatch('setMyName','')
+            this.$store.dispatch('setMyEmail','')
+            this.isLogin = false;
+            this.isBookMarked = false;
+        }
+
+        if(this.$store.getters.isLogin != false){
+            this.isLogin = true;
+            let url = '/favorite/check/'+this.aptcode;
+            http.get(url)
+            .then(({data}) => {
+                this.isBookMarked = data;
+            })
+            .catch((error) => {
+                console.log(error);
+                alert('북마크 저장 실패!2')
+            }) 
+        }
+
         if(!window.kakao || !window.kakao.maps || window.kakao === undefined){
             const mapScript = document.createElement("script");
             mapScript.src = "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=946e097cb36660234400eaaf59be1833&libraries=services";
@@ -59,19 +84,20 @@ export default {
         } else{
             this.roadviewInit();
         }
-        let url = '/favorite/check/'+this.aptcode;
-        http.get(url)
-        .then(({data}) => {
-            this.isBookMarked = data;
-        })
-        .catch((error) => {
-            if(error.response.status==403){
-                alert('로그인 세션 만료!');
-                this.$router.replace({name:'home'});
-            } else {
-                alert('북마크 저장 실패!')
-            }
-        }) 
+        // if(this.get_cookie() != null){
+        //     this.isLogin = true;
+        //     let url = '/favorite/check/'+this.aptcode;
+        //     http.get(url)
+        //     .then(({data}) => {
+        //         this.isBookMarked = data;
+        //     })
+        //     .catch((error) => {
+        //         console.log(error);
+        //         alert('북마크 저장 실패!')
+        //     }) 
+        // } else{
+        //     this.isLogin = false;
+        // }
     },
 
     methods: {
@@ -91,7 +117,7 @@ export default {
             }
             // console.log('북마크 클릭 됨');
             let url = '/favorite/'+this.aptcode;
-            if(this.isBookMarked){
+            if(this.isBookMarked == true){
                 http.delete(url)
                 .then(() => {
                     this.isBookMarked = false;

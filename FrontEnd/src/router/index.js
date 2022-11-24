@@ -8,7 +8,10 @@ import NoticeList from '@/components/Function/board/Notice/NoticeList.vue'
 import NoticeDetail from '@/components/Function/board/Notice/NoticeDetail.vue'
 import NoticeEdit from '@/components/Function/board/Notice/NoticeEdit.vue'
 import NoticeWrite from '@/components/Function/board/Notice/NoticeWrite.vue'
-import QnaList from '@/components/Function/board/QnaList.vue'
+import QnaList from '@/components/Function/board/Qna/QnaList.vue'
+import QnaDetail from '@/components/Function/board/Qna/QnaDetail.vue'
+import QnaEdit from '@/components/Function/board/Qna/QnaEdit.vue'
+import QnaWrite from '@/components/Function/board/Qna/QnaWrite.vue'
 import store from '../store/index'
 Vue.use(VueRouter)
 
@@ -31,6 +34,11 @@ const routes = [
         path: 'signup',
         name: 'signup',
         component: () => import('@/components/User/SignUpView.vue'),
+      },
+      {
+        path: 'mypage',
+        name: 'mypage',
+        component: () => import('@/components/User/MyPage.vue'),
       },
     ],
   },
@@ -75,6 +83,27 @@ const routes = [
         name: 'qnalist',
         component: QnaList
       },
+      {
+        path: 'qnadetail',
+        name: 'qnadetail',
+        component: QnaDetail,
+      },
+      {
+        path: 'qnaedit',
+        name: 'qnaedit',
+        component: QnaEdit,
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path: 'qnawrite',
+        name: 'qnawrite',
+        component: QnaWrite,
+        meta: {
+          auth: true
+        }
+      },
     ],
   },
   // {
@@ -99,9 +128,9 @@ router.beforeEach((to, from, next) => {
   if (to.meta.auth && get_cookie() == null) {
     alert('로그인 세션이 만료되었습니다. 다시 로그인해 주세요!');
     store.state.isLogin = false;
-    store.state.MyRole = "";
-    store.state.MyName = "";
-    store.state.MyEmail = "";
+    store.state.myRole = "";
+    store.state.myName = "";
+    store.state.myEmail = "";
     // store.dispatch('setisLogin',false);
     // store.dispatch('setMyRole', "");
     // store.dispatch('setMyName', "");
@@ -110,9 +139,9 @@ router.beforeEach((to, from, next) => {
     return;
   } else if(get_cookie() == null){
     store.state.isLogin = false;
-    store.state.MyRole = "";
-    store.state.MyName = "";
-    store.state.MyEmail = "";
+    store.state.myRole = "";
+    store.state.myName = "";
+    store.state.myEmail = "";
     next();
     return;
   }

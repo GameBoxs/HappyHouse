@@ -73,7 +73,7 @@
                     </div>
 
                     <!-- 북마크 리스트 만들어야 함 AptList 그대로 복사해서 응용 -->
-                    <div class="accordion pt-2 mb-2" id="mapOptionThree">
+                    <div class="accordion pt-2 mb-2" id="mapOptionFour">
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="aptListH2">
                                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#aptList" aria-expanded="true" aria-controls="collapseOne" style="background-color:white; color:black;">
@@ -82,7 +82,7 @@
                             </h2>
                             <div id="aptList" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                 <div class="accordion-body aptListBody" style="overflow:auto; height:242px">
-                                    <BookMarkList :keys="bookrerenderkey" @make-aptmarker="setBookList" @Move-Apt="moveApt"/>
+                                    <BookMarkList :keys="bookrerenderkey" @make-aptmarker="setBookList" @Move-Apt="moveApt" v-if="this.$store.getters.isLogin == true"/>
                                 </div>
                             </div>
                         </div>
@@ -130,9 +130,9 @@ export default {
             cafe:"",
             bank:"",
             priceFilter:"101000",
-            aptList:null,
-            tempAptList:null,
-            bookList:null,
+            aptList:[],
+            tempAptList:[],
+            bookList:[],
             bookrerenderkey:1,
         };
     },
@@ -247,9 +247,14 @@ export default {
             }
         },
         searchPlaces() {
-            if (this.bigmart==false && this.mart==false && this.bank==false && this.cafe==false && !this.aptList && !this.bookList) {
+            if (this.bigmart==false && this.mart==false && this.bank==false && this.cafe==false && this.aptList==null && this.bookList==null) {
                 return;
             }
+
+            if(this.placeOverlay==null) {
+            console.log(this.placeOverlay);
+    return;
+}
             
             // 커스텀 오버레이를 숨깁니다 
             this.placeOverlay.setMap(null);
@@ -268,10 +273,10 @@ export default {
             if(this.cafe==true){
                 this.ps.categorySearch('CE7', this.placesSearchCB, {useMapBounds:true}); 
             }
-            if(this.aptList.length>0){
+            if(this.aptList){
                 this.makeAptMarker(this.aptList);
             }
-            if(this.bookList.length>0){
+            if(this.bookList){
                 this.makeBookMarker(this.bookList);
             }
         },
@@ -364,27 +369,37 @@ export default {
         },
         setAptList(aptnamelist) {
             this.aptList = [];
+            if(aptnamelist == null){
+                return;
+            }
             console.log('MapView.vue 366 aptnamelist : ' + JSON.stringify(aptnamelist) + 'bookList : ' + this.bookList);
-            if(aptnamelist){
+            if(aptnamelist || aptnamelist.length>0){
+                console.log(typeof(this.bookList));
                 if(this.bookList.length>0){
                     this.tempAptList = aptnamelist;
                     let temp = aptnamelist.filter(item1 => this.bookList.some(item2 => item1.name != item2.name))
                     this.aptList = temp;
                     console.log('MapView.vue 371 aptList : ' + this.aptList);
                 } else{
-                    if(this.tempAptList){
+                    console.log('MapView.vue tempAptList : ');
+                    console.log(this.tempAptList);
+                    if(this.tempAptList.length>0){
                         this.aptList = this.tempAptList;
-                        this.tempAptList = null;
+                        this.tempAptList = [];
                     } else {
                         this.aptList = aptnamelist;
                     }
                 }
-
                 this.searchPlaces();
             }
         },
         setBookList(booknamelist) {
-            this.bookList = null;
+            this.bookList = [];
+            if(booknamelist == null){
+                this.bookList = [];
+                this.setAptList(this.aptList);
+                return;
+            }
             if(booknamelist) {
                 this.bookList = booknamelist;
             }
@@ -455,9 +470,9 @@ export default {
             deep:true,
             handler(newData) {
                 // console.log("MapView.vue - finalInfo 바뀜")
-                this.searchPlaces();
                 this.removeCategoryMarker();
                 this.removeInfoWindo();
+                this.searchPlaces();
                 // this.makeAptMarker();
                 // 주소로 좌표를 검색, 이름이 있을때만(초기화 해서 이름이 없으면 진행 안함)
                 if(newData.name){

@@ -6,11 +6,11 @@
                     <div>
                         <!-- <h1 class="mb-5 text-warning" v-if="$route.params.text == '공지 사항'">{{$route.params.text}}</h1> -->
                         <h1 class="mb-5 text-warning">{{maskname}}</h1>
-                        <h1 class="mb-5" v-if="$route.params.text == 'Q&A'">
+                        <!-- <h1 class="mb-5" v-if="$route.params.text == 'Q&A'">
                             <span class="text-danger">{{$route.params.text.substr(0,1)}} </span>
                             <span class="text-white">{{$route.params.text.substr(1,1)}} </span>
                             <span class="text-primary">{{$route.params.text.substr(2,1)}}</span>
-                        </h1>
+                        </h1> -->
                         
                     </div>
                 </div>
