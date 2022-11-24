@@ -3,7 +3,6 @@ package com.ssafy.happyhouse.domain.dto;
 import com.ssafy.happyhouse.domain.enumurate.BoardType;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
@@ -26,6 +25,9 @@ public class BoardDTO {
 
     @NotBlank
     private String username;
+
+    @NotBlank
+    private String useremail;
 
     @NotBlank
     private LocalDateTime createTime;

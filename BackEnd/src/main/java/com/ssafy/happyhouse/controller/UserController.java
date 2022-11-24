@@ -62,8 +62,8 @@ public class UserController {
         return userInfo;
     }
 
-    @PatchMapping
-    public void changePassword(@Login User user, @RequestParam String password) {
+    @PatchMapping("/password")
+    public void changePassword(@Login User user, @RequestBody String password) {
         if (user == null) {
             throw new NoUserException("NO USER");
         }

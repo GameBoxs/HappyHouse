@@ -30,9 +30,10 @@ public class WebConfig implements WebMvcConfigurer {
                 .order(2)
                 .addPathPatterns("/**")
                 .excludePathPatterns("/", "/users", "/users/login", "/users/logout",
-                        "/users/email", "/boards", "/boards/**",
-                        "/dongcode/**", "/housedeal/**", "/houseinfo/**"
-                        , "/comments/boards/**", "/favorite/rank", "/js/**", "/css/**","/img/**", "/index.html", "/error");
+                        "/users/email", "/boards", "/boards/**", "/dongcode/**",
+                        "/housedeal/**", "/houseinfo/**", "/comments/**", "/favorite/**",
+                        "/js/**", "/css/**","/img/**", "/index.html",
+                        "/error","/news/search","/password");
     }
 
     @Override

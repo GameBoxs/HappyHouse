@@ -7,6 +7,7 @@ import com.ssafy.happyhouse.domain.dto.PageInfo;
 import com.ssafy.happyhouse.domain.entity.Comment;
 import com.ssafy.happyhouse.domain.entity.User;
 import com.ssafy.happyhouse.domain.enumurate.Role;
+import com.ssafy.happyhouse.exception.AuthenticationRequiredException;
 import com.ssafy.happyhouse.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,10 @@ public class CommentController {
 
     @PostMapping
     public String saveComment(@RequestBody CommentSaveDTO commentSaveDTO, @Login User user) {
+        if (user == null) {
+            log.warn("권한없는 유저의 요청");
+            throw new AuthenticationRequiredException("권한이 없는 유저입니다.");
+        }
         commentService.save(commentSaveDTO, user);
         return "ok";
     }
@@ -35,6 +40,10 @@ public class CommentController {
 
     @DeleteMapping("/{commentId}")
     public String deleteComment(@PathVariable Long commentId, @Login User user) {
+        if (user == null) {
+            log.warn("권한없는 유저의 요청");
+            throw new AuthenticationRequiredException("권한이 없는 유저입니다.");
+        }
         commentService.deleteById(commentId, user);
         return "ok";
     }

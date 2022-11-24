@@ -35,10 +35,13 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.7.5'
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2'
     //JWT
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     //JWT
+    // https://mvnrepository.com/artifact/javax.mail/javax.mail-api
+
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.mysql:mysql-connector-j'
 
@@ -48,43 +51,6 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
-
-//apply plugin: 'com.github.node-gradle.node'
-
-//task deleteVueBuildFiles(type: Delete) {
-//    delete "src/main/resources/static/static", "src/main/resources/static/index.html", "${project.projectDir}/../FrontEnd/node_modules"
-//}
-
-/**
- * vue-project를 build하기 위한 설정
- * - vue-project를 빌드하기 위한 npm build task
- *
- * dependsOn에 'deleteVueBuildFiles', 'npmInstall' task 정보를 지정하였으므로
- * npmBuild task는 위 두 task에 의존한다는 것이고,
- * npmBuild가 실행되기 전 위 두 task가 차례대로 먼저 실행됩니다.
- * deleteVueBuildFiles task는 빌드 결과물을 제거하기 위하여 별도 만든 task이고,
- * npmInstall task는 node plugin에서 제공하는 task입니다.
- */
-//task npmBuild(type: NpmTask, dependsOn: ['deleteVueBuildFiles', 'npmInstall']) {
-//    args = ["run", "build"]
-//}
-/**
- * vue-project를 build하기 위한 설정
- * node gradle에서 제공하는 npmInstall task를 어느 시점에 실행시켜 줄지 지정해주는 것입니다.
- * "gradle build 시 수행되는 processResources task가 실행되기 전에 npmBuild task를 실행하라"
- *
- * 그리고 npmBuild task의 의존으로 deleteVueBuildFiles, npmInstall task가 있으므로,
- * "npmBuild task가 실행하기 전에 deleteVueBuildFiles, npmInstall task를 순서대로 실행하라."
- *
- * 정리한 task 실행 순서는
- * 1) deleteVueBuildFiles
- * 2) npmInstall
- * 3) npmBuild
- * 4) processResources
- * 입니다.
- */
-//processResources.dependsOn 'npmBuild'
-
 
 tasks.named('test') {
     useJUnitPlatform()

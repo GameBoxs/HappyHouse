@@ -13,6 +13,8 @@ import java.util.List;
 public interface BoardService {
     Page<BoardDTO> findAllByType(BoardType boardType, PageInfo pageInfo);
 
+    Page<BoardDTO> findMyBoard(BoardType boardType, User user, PageInfo pageInfo);
+
     BoardDTO findByBoardId(Long userId, Long BoardId);
 
     Long save(Long userId, BoardRegistDTO boardRegistDTO);

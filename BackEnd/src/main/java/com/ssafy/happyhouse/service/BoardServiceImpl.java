@@ -36,6 +36,16 @@ public class BoardServiceImpl implements BoardService {
                 .map(board -> getBoardDTO(board));
     }
 
+    public Page<BoardDTO> findMyBoard(BoardType boardType, User user, PageInfo pageInfo) {
+        if (user == null) {
+            throw new AuthenticationRequiredException("로그인이 필요합니다.");
+        }
+
+        Page<Board> board = boardRepository.findByBoardTypeAndUserOrderByIdDesc(boardType, user, PageRequest.of(pageInfo.getPage(), pageInfo.getSIZE()));
+        return board
+                .map(each -> getBoardDTO(each));
+    }
+
     @Override
     public BoardDTO findByBoardId(Long userId, Long boardId) {
         Board board = boardRepository.findById(boardId)
@@ -111,6 +121,7 @@ public class BoardServiceImpl implements BoardService {
                 .title(board.getTitle())
                 .content(board.getContent())
                 .username(board.getUser().getName())
+                .useremail(board.getUser().getEmail())
                 .createTime(board.getCreateTime())
                 .boardType(board.getBoardType())
                 .hit(hit)

@@ -30,6 +30,11 @@ public class BoardController {
         return boardService.findAllByType(boardType, new PageInfo(page));
     }
 
+    @GetMapping("/user")
+    public Page<BoardDTO> myBoardList(@RequestParam BoardType boardType, @Login User user, @RequestParam(required = false, defaultValue = "0") Integer page) {
+        return boardService.findMyBoard(boardType, user, new PageInfo(page));
+    }
+
     @GetMapping("/search")
     public Page<BoardDTO> searchByTitle(@RequestParam String title, @RequestParam(required = false, defaultValue = "0") Integer page) {
         return boardService.findByTitle(title, new PageInfo(page));

@@ -1,10 +1,8 @@
 package com.ssafy.happyhouse.security;
 
-import com.ssafy.happyhouse.domain.dto.UserDTO;
 import com.ssafy.happyhouse.domain.dto.UserLoginDTO;
 import com.ssafy.happyhouse.domain.entity.User;
 import com.ssafy.happyhouse.repository.UserRepository;
-import com.ssafy.happyhouse.service.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
