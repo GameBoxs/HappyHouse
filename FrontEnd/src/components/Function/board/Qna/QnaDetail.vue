@@ -168,8 +168,8 @@ export default {
                 let url = '/comments/'+id;
                 http.delete(url)
                 .then(() =>{
-                    // window.location.reload(true);
-                    this.$router.go();
+                    this.commentItem = [];
+                    this.getCommentItem();
                     alert('삭제 성공!');
                 })
                 .catch((error) => {
@@ -188,7 +188,9 @@ export default {
             let url = '/comments';
             http.post(url,{"boardId" : this.$route.query.id,"content" : this.commentText})
             .then(() =>{
-                window.location.reload(true);
+                // window.location.reload(true);
+                this.commentItem = [];
+                this.getCommentItem();
             })
             .catch((error) => {
                 if(error.response.status==403){

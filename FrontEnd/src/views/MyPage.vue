@@ -218,7 +218,7 @@ export default {
                     http.patch(url,{"password":new String(this.password)})
                     .then(() => {
                         alert('비밀번호 변경에 성공했습니다!');
-                        this.$router.go();
+                        this.$router.replace({name:'home'});
                     })
                     .catch((error) => {
                         if(error.response.status == 403){

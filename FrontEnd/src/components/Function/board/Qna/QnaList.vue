@@ -114,6 +114,12 @@ export default {
     },
     watch: {
         currentPage() {
+            this.getItems()
+        }
+    },
+    methods: {
+        getItems() {
+            this.items=[];
             let url = '';
             if(this.isSearch == false){
                 url = 'boards?boardType=qna&page='+(parseInt(this.currentPage)-1);
@@ -137,9 +143,7 @@ export default {
                 console.log(e);
                 alert('게시글 불러오기에 실패 했습니다.');
             })
-        }
-    },
-    methods: {
+        },
         goCreate() {
             this.$router.push({name:'qnawrite'});
         },
@@ -171,9 +175,7 @@ export default {
             this.searchText = e.target.value;
         },
         redirectQnaList() {
-            // this.$router.push({name:'noticelist'});
-            // window.location.reload(true);
-            this.$router.go();
+            this.getItems();
         }
     },
 };
