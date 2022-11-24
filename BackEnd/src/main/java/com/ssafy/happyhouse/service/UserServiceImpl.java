@@ -33,6 +33,7 @@ public class UserServiceImpl implements UserService {
         find.orElseThrow(() -> new NoUserException("NO USER"));
 
         return UserDTO.builder()
+                .id(find.get().getId())
                 .name(find.get().getName())
                 .email(find.get().getEmail())
                 .password(find.get().getPassword())

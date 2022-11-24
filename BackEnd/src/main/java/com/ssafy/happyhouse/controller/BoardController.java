@@ -30,6 +30,12 @@ public class BoardController {
         return boardService.findAllByType(boardType, new PageInfo(page));
     }
 
+    @PostMapping
+    public String saveBoard(@Validated @RequestBody BoardRegistDTO boardRegistDTO, @Login User user) {
+        boardService.save(user.getId(), boardRegistDTO);
+        return "ok";
+    }
+
     @GetMapping("/user")
     public Page<BoardDTO> myBoardList(@RequestParam BoardType boardType, @Login User user, @RequestParam(required = false, defaultValue = "0") Integer page) {
         return boardService.findMyBoard(boardType, user, new PageInfo(page));
@@ -38,14 +44,6 @@ public class BoardController {
     @GetMapping("/search")
     public Page<BoardDTO> searchByTitle(@RequestParam String title, @RequestParam(required = false, defaultValue = "0") Integer page) {
         return boardService.findByTitle(title, new PageInfo(page));
-    }
-
-    @PostMapping
-    public void saveBoard(@Validated @RequestBody BoardRegistDTO boardRegistDTO, @Login User user) throws IOException {
-        if (user == null) {
-            throw new NoUserException("NO USER");
-        }
-        Long boardId = boardService.save(user.getId(), boardRegistDTO);
     }
 
     @GetMapping("/{boardId}")
@@ -65,8 +63,9 @@ public class BoardController {
     }
 
     @DeleteMapping("/{boardId}")
-    public void deleteBoard(@PathVariable Long boardId, @Login User user) {
+    public String deleteBoard(@PathVariable Long boardId, @Login User user) {
         boardService.deleteBoard(user, boardId);
+        return "ok";
     }
 
 }

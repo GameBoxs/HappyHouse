@@ -1,14 +1,14 @@
 package com.ssafy.happyhouse.domain.dto;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.ToString;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 
 @Data
 @Builder
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class CommentSaveDTO {
     @NotBlank
     private Long boardId;

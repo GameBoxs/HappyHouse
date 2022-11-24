@@ -25,8 +25,21 @@ public class JwtInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String requestURI = request.getRequestURI();
+        String method = request.getMethod();
 
-        if (HttpMethod.OPTIONS.matches(request.getMethod())) {
+        if (HttpMethod.OPTIONS.matches(method)) {
+            return true;
+        }
+
+        if (requestURI.matches("\\/boards") && method.matches(HttpMethod.GET.name())) {
+            return true;
+        }
+
+        if (requestURI.matches("\\/boards\\/[0-9]+") && method.matches(HttpMethod.GET.name())) {
+            return true;
+        }
+
+        if(requestURI.matches("\\/favorite\\/[0-9]+") && method.matches(HttpMethod.GET.name())){
             return true;
         }
 

@@ -1,7 +1,9 @@
 package com.ssafy.happyhouse.domain.dto;
 
-
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 
@@ -9,9 +11,7 @@ import javax.validation.constraints.NotBlank;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserLoginDTO {
-    @NotBlank
-    private String email;
+public class PasswordDTO {
     @NotBlank
     private String password;
 }

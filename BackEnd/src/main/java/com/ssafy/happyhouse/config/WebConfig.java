@@ -29,11 +29,10 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(new JwtInterceptor(jwtProvider, userRepository))
                 .order(2)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/", "/users", "/users/login", "/users/logout",
-                        "/users/email", "/boards", "/boards/**", "/dongcode/**",
-                        "/housedeal/**", "/houseinfo/**", "/comments/**", "/favorite/**",
-                        "/js/**", "/css/**","/img/**", "/index.html",
-                        "/error","/news/search","/password");
+                .excludePathPatterns("/users", "/users/login", "/users/logout", "/users/email",
+                        "/boards/search", "/comments/boards/**", "/favorite/rank")
+                .excludePathPatterns("/", "/error", "/js/**", "/css/**", "/img/**", "/index.html")
+                .excludePathPatterns("/password", "/dongcode/**", "/housedeal/**", "/houseinfo/**", "/news/search");
     }
 
     @Override

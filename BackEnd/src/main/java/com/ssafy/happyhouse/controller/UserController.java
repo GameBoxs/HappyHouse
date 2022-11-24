@@ -1,6 +1,7 @@
 package com.ssafy.happyhouse.controller;
 
 import com.ssafy.happyhouse.annotation.Login;
+import com.ssafy.happyhouse.domain.dto.PasswordDTO;
 import com.ssafy.happyhouse.domain.dto.UserDTO;
 import com.ssafy.happyhouse.domain.dto.UserLoginDTO;
 import com.ssafy.happyhouse.domain.entity.User;
@@ -63,12 +64,9 @@ public class UserController {
     }
 
     @PatchMapping("/password")
-    public void changePassword(@Login User user, @RequestBody String password) {
-        if (user == null) {
-            throw new NoUserException("NO USER");
-        }
-
-        userService.updatePassword(user.getId(), password);
+    public String changePassword(@Login User user, @RequestBody PasswordDTO password) {
+        userService.updatePassword(user.getId(), password.getPassword());
+        return "ok";
     }
 
     @GetMapping("/email")

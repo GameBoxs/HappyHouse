@@ -7,7 +7,6 @@ import com.ssafy.happyhouse.domain.entity.HouseInfo;
 import com.ssafy.happyhouse.domain.entity.User;
 import com.ssafy.happyhouse.exception.AuthenticationRequiredException;
 import com.ssafy.happyhouse.service.FavoriteHouseService;
-import com.ssafy.happyhouse.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -33,11 +32,13 @@ public class FavoriteHouseController {
 
     @PostMapping("/{aptCode}")
     public String addFavorite(@PathVariable Long aptCode, @Login User user) {
-        if(user == null){
-            log.warn("NO USER");
-            throw new AuthenticationRequiredException("로그인이 필요합니다.");
-        }
         favoriteHouseService.save(user.getId(), aptCode);
+        return "ok";
+    }
+
+    @DeleteMapping("/{aptCode}")
+    public String deleteFavorite(@PathVariable Long aptCode, @Login User user) {
+        favoriteHouseService.deleteById(aptCode, user);
         return "ok";
     }
 
@@ -50,6 +51,11 @@ public class FavoriteHouseController {
         return favoriteHouseService.findFavoriteHouses(user.getId());
     }
 
+    @GetMapping("/rank")
+    public List<FavoriteRankDTO> favoriteRank() {
+        return favoriteHouseService.findRank();
+    }
+
     @GetMapping("/check/{aptCode}")
     public Boolean isFavorite(@PathVariable Long aptCode, @Login User user) {
         if(user == null){
@@ -57,20 +63,5 @@ public class FavoriteHouseController {
             throw new AuthenticationRequiredException("로그인이 필요합니다.");
         }
         return favoriteHouseService.isFavorite(user.getId(), aptCode);
-    }
-
-    @DeleteMapping("/{aptCode}")
-    public String deleteFavorite(@PathVariable Long aptCode, @Login User user) {
-        if(user == null){
-            log.warn("NO USER");
-            throw new AuthenticationRequiredException("로그인이 필요합니다.");
-        }
-        favoriteHouseService.deleteById(aptCode, user);
-        return "ok";
-    }
-
-    @GetMapping("/rank")
-    public List<FavoriteRankDTO> favoriteRank() {
-        return favoriteHouseService.findRank();
     }
 }

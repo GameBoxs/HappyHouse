@@ -1,11 +1,12 @@
 package com.ssafy.happyhouse.domain.dto;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class UserDTO {
     private Long id;
